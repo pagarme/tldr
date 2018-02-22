@@ -1,0 +1,24 @@
+{
+  "name": "tldr",
+  "version": "0.1.0",
+  "description": "Pagar.me's receipt solution",
+  "main": "index.js",
+  "author": "Pagar.me Pagamentos S/A <@pagarme>",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pagarme/superbowleto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pagarme/tldr/issues"
+  },
+  "homepage": "https://github.com/pagarme/tldr#readme",
+  "scripts": {
+    "lint": "eslint 'test/**/*.js' 'src/**/*.js'"
+  },
+  "devDependencies": {
+    "eslint": "4.18.1",
+    "eslint-config-pagarme-base": "2.0.0"
+  }
+}
