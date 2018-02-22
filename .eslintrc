@@ -1,0 +1,10 @@
+{
+  "extends": ["pagarme-base"],
+  "env": {
+    "node": true,
+  },
+  "rules": {
+    "comma-dangle": ["error", "only-multiline", "always-multiline"],
+  },
+}
+
