@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  base:
+    build: .
+    volumes:
+      - .:/tldr
+      - /tldr/node_modules
+
+  lint:
+    extends: base
+    command: yarn lint
+
+  test:
+    extends: base
+    command: yarn test
+
+  app:
+    extends: base
+    command: yarn start
+    ports:
+      - "8888:8888"
+    environment:
+      - PORT=8888
+
