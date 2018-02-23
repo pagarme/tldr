@@ -29,5 +29,8 @@
     "eslint-config-pagarme-base": "2.0.0",
     "eslint-plugin-import": "2.9.0",
     "jest": "22.4.0"
+  },
+  "dependencies": {
+    "sequelize": "^4.33.4"
   }
 }
