@@ -20,7 +20,8 @@
   "homepage": "https://github.com/pagarme/tldr#readme",
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
-    "test": "jest && codecov"
+    "test": "jest && codecov",
+    "start": "node src/index.js"
   },
   "devDependencies": {
     "codecov": "3.0.0",
