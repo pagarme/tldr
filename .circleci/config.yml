@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9.4
+    working_directory: ~/tldr
+    steps:
+      - checkout
+      - restore_cache:
+          keys: v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn test
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
