@@ -10,15 +10,22 @@
     "type": "git",
     "url": "git+https://github.com/pagarme/superbowleto.git"
   },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  },
   "bugs": {
     "url": "https://github.com/pagarme/tldr/issues"
   },
   "homepage": "https://github.com/pagarme/tldr#readme",
   "scripts": {
-    "lint": "eslint 'test/**/*.js' 'src/**/*.js'"
+    "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
+    "test": "jest && codecov"
   },
   "devDependencies": {
+    "codecov": "3.0.0",
     "eslint": "4.18.1",
-    "eslint-config-pagarme-base": "2.0.0"
+    "eslint-config-pagarme-base": "2.0.0",
+    "jest": "22.4.0"
   }
 }
