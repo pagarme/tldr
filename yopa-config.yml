@@ -1,0 +1,10 @@
+# YOPA Configuration
+
+region: yopa-local
+host: yopa
+bind-address: 0.0.0.0
+sqs:
+  port: 47195
+
+messaging:
+  - sqs://receipts
