@@ -206,7 +206,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-aws-sdk@^2.203.0:
+aws-sdk@^2.203.0, aws-sdk@^2.7.7:
   version "2.203.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.203.0.tgz#7573c1274a4350bd5d78a6db93c9eeab40940acb"
   dependencies:
@@ -2923,6 +2923,13 @@ sqlite3@^3.1.13:
   dependencies:
     nan "~2.7.0"
     node-pre-gyp "~0.6.38"
+
+sqs-quooler@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/sqs-quooler/-/sqs-quooler-1.3.0.tgz#a3038713c03a64cebb52e57e88d49d5b4686b93a"
+  dependencies:
+    aws-sdk "^2.7.7"
+    bluebird "^3.4.6"
 
 sshpk@^1.7.0:
   version "1.13.1"
