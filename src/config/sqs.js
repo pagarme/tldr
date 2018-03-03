@@ -4,14 +4,14 @@ const {
 
 const config = {
   development: {
-    endpoint: `http://${process.env.SQS_HOST || 'yopa'}:47195`,
+    endpoint: `http://${process.env.SQS_HOST}:47195`,
     region: 'yopa-local',
     accessKeyId: 'x',
     secretAccessKey: 'x',
     sessionToken: 'x',
   },
   test: {
-    endpoint: `http://${process.env.SQS_HOST || 'yopa'}:47195`,
+    endpoint: `http://${process.env.SQS_HOST}:47195`,
     region: 'yopa-local',
     accessKeyId: 'x',
     secretAccessKey: 'x',

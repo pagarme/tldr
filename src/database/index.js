@@ -8,10 +8,10 @@ const db = {
   Sequelize,
 }
 
-const databaseHost = process.env.DATABASE_URL || 'database'
-const databaseName = process.env.DATABASE_NAME || 'postgres'
-const databaseUsername = process.env.DATABASE_USERNAME || 'postgres'
-const databasePassword = process.env.DATABASE_PASSWORD || 'Tldr123$'
+const databaseHost = process.env.DATABASE_URL
+const databaseName = process.env.DATABASE_NAME
+const databaseUsername = process.env.DATABASE_USERNAME
+const databasePassword = process.env.DATABASE_PASSWORD
 
 const sequelize = new Sequelize(
   databaseName,
