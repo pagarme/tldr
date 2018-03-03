@@ -21,7 +21,8 @@
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "jest && codecov",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "start-worker": "node src/bin/worker.js"
   },
   "devDependencies": {
     "codecov": "3.0.0",

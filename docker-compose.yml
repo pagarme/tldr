@@ -38,3 +38,9 @@ services:
     environment:
       - PORT=8888
 
+  worker:
+    extends: base
+    command: yarn start-worker
+    links:
+      - yopa
+
