@@ -28,11 +28,15 @@ services:
 
   test:
     extends: base
+    environment:
+      - NODE_ENV=test
     command: yarn test
 
   app:
     extends: base
     command: yarn start
+    environment:
+      - NODE_ENV=development
     ports:
       - "8888:8888"
     environment:
@@ -41,6 +45,8 @@ services:
   worker:
     extends: base
     command: yarn start-worker
+    environment:
+      - NODE_ENV=development
     links:
       - yopa
 
