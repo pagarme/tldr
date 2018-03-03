@@ -7,6 +7,13 @@ services:
       - .:/tldr
       - /tldr/node_modules
 
+  database:
+    image: postgres:9.6.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=Tldr123$$
+    ports:
+      - 5432
+
   yopa:
     image: pagarme/yopa:latest
     command: java -Xms64m -Xmx256m -jar uberjar.jar -c /tmp/yopa-in/config.yml -o /tmp/dev-env-aws-regions-override.xml
@@ -41,6 +48,8 @@ services:
       - "8888:8888"
     environment:
       - PORT=8888
+    links:
+      - database
 
   worker:
     extends: base
@@ -49,4 +58,5 @@ services:
       - NODE_ENV=development
     links:
       - yopa
+      - database
 

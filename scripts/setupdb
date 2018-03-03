@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker-compose run app node_modules/.bin/sequelize db:create --config src/config/database.js
+
