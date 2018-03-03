@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    event_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
     card_holder_name: {
       type: DataTypes.STRING,
       allowNull: false,
