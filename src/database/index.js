@@ -58,7 +58,13 @@ const readModelFiles = () =>
 
 const bootstrap = () =>
   readModelFiles()
-    .then(() => db.sequelize.sync({ force: false }))
+    .then(() => {
+      console.log('Attempting database authentication')
+      return db.sequelize.authenticate()
+    })
+    .then(() => {
+      console.log('Authentication successful')
+    })
     .catch((err) => {
       console.error('Error bootstraping application')
       throw err
