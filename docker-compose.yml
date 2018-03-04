@@ -39,7 +39,7 @@ services:
       - NODE_ENV=test
     command: yarn test
 
-  app:
+  server:
     extends: base
     command: yarn start
     environment:
@@ -49,6 +49,7 @@ services:
     environment:
       - PORT=8888
     links:
+      - yopa
       - database
 
   worker:
