@@ -1,10 +1,14 @@
 require('dotenv').config()
 
+const express = require('express')
 const database = require('../database')
 const {
   processReceipt,
   ReceiptsQueue,
 } = require('../services/worker')
+
+const app = express()
+app.get('/_health_check', (req, res) => res.send())
 
 ReceiptsQueue.on('error', (err) => {
   console.error({
@@ -18,11 +22,12 @@ ReceiptsQueue.on('error', (err) => {
 })
 
 database.bootstrap()
+  .then(() => app.listen(process.env.PORT))
   .then(() => {
+    console.log('Worker is up!')
+
     ReceiptsQueue.startProcessing(processReceipt, {
       keepMessages: true,
     })
-
-    console.log('Worker is up!')
   })
 
