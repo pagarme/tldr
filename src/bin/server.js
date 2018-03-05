@@ -18,6 +18,11 @@ app.get(
   receiptController.render
 )
 
+app.get(
+  '/_health_check',
+  (req, res) => res.send()
+)
+
 database.bootstrap()
   .then(() => app.listen(process.env.PORT))
   .then(() => {
