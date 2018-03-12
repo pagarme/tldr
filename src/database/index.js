@@ -17,7 +17,7 @@ const {
   password,
   logging,
   port,
-} = getConfig()
+} = getConfig
 
 const sequelize = new Sequelize(
   database,

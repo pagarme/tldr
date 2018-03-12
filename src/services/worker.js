@@ -7,7 +7,7 @@ const getConfig = require('../config/queues')
 const {
   endpoint,
   concurrency,
-} = prop('receipts', getConfig())
+} = prop('receipts', getConfig)
 
 const ReceiptsQueue = new Queue({
   sqs,

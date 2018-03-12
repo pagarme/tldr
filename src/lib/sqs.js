@@ -13,7 +13,7 @@ AWS.config.update({
 const {
   endpoint,
   region,
-} = getConfig()
+} = getConfig
 
 let sqs
 
