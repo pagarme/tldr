@@ -9,6 +9,7 @@ const db = {
 }
 
 const databaseHost = process.env.DATABASE_URL
+const databasePort = process.env.DATABASE_PORT
 const databaseName = process.env.DATABASE_NAME
 const databaseUsername = process.env.DATABASE_USERNAME
 const databasePassword = process.env.DATABASE_PASSWORD
@@ -19,6 +20,7 @@ const sequelize = new Sequelize(
   databasePassword,
   {
     host: databaseHost,
+    port: databasePort,
     dialect: 'postgres',
     operatorsAliases: false,
 
@@ -56,7 +58,13 @@ const readModelFiles = () =>
 
 const bootstrap = () =>
   readModelFiles()
-    .then(() => db.sequelize.sync({ force: false }))
+    .then(() => {
+      console.log('Attempting database authentication')
+      return db.sequelize.authenticate()
+    })
+    .then(() => {
+      console.log('Authentication successful')
+    })
     .catch((err) => {
       console.error('Error bootstraping application')
       throw err
