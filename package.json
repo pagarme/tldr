@@ -21,7 +21,8 @@
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "jest && codecov",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "start-worker": "node src/bin/worker.js"
   },
   "devDependencies": {
     "codecov": "3.0.0",
@@ -31,9 +32,11 @@
     "jest": "22.4.0"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "ramda": "^0.25.0",
-    "sequelize": "^4.33.4",
-    "sqlite3": "^3.1.13"
+    "aws-sdk": "2.203.0",
+    "bluebird": "3.5.1",
+    "ramda": "0.25.0",
+    "sequelize": "4.33.4",
+    "sqlite3": "3.1.13",
+    "sqs-quooler": "1.3.0"
   }
 }
