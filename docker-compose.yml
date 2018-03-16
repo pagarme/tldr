@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
   base:
@@ -6,6 +6,21 @@ services:
     volumes:
       - .:/tldr
       - /tldr/node_modules
+
+  yopa:
+    image: pagarme/yopa:latest
+    command: java -Xms64m -Xmx256m -jar uberjar.jar -c /tmp/yopa-in/config.yml -o /tmp/dev-env-aws-regions-override.xml
+    ports:
+      - 47195
+    volumes:
+      - ./yopa-config.yml:/tmp/yopa-in/config.yml:ro
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "curl -f 'http://localhost:47195?Action=GetQueueUrl&QueueName=receipts",
+      ]
+      interval: 20s
+      retries: 10
 
   lint:
     extends: base
@@ -22,4 +37,10 @@ services:
       - "8888:8888"
     environment:
       - PORT=8888
+
+  worker:
+    extends: base
+    command: yarn start-worker
+    links:
+      - yopa
 
