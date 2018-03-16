@@ -18,7 +18,7 @@ const ReceiptsQueue = new Queue({
 const processReceipt = (item, sqsMessage) => {
   console.log()
   console.log('Processing new item')
-  console.log(item)
+  console.log(JSON.stringify(item))
 
   database.Receipt.create(item)
     .then((receipt) => {
