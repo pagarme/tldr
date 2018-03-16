@@ -5,13 +5,13 @@ const {
 const config = {
   development: {
     receipts: {
-      endpoint: `http://${process.env.SQS_HOST || 'yopa'}:47195/queue/receipts`,
+      endpoint: process.env.RECEIPTS_QUEUE_URL,
       concurrency: 10,
     },
   },
   test: {
     receipts: {
-      endpoint: `http://${process.env.SQS_HOST || 'yopa'}:47195/queue/receipts`,
+      endpoint: process.env.RECEIPTS_QUEUE_URL,
       concurrency: 10,
     },
   },

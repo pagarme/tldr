@@ -8,17 +8,30 @@ const db = {
   Sequelize,
 }
 
-const sequelize = new Sequelize('tldr', null, null, {
-  dialect: 'sqlite',
-  storage: './tldr.sqlite',
-  operatorsAliases: false,
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-  },
-})
+const databaseHost = process.env.DATABASE_URL
+const databaseName = process.env.DATABASE_NAME
+const databaseUsername = process.env.DATABASE_USERNAME
+const databasePassword = process.env.DATABASE_PASSWORD
+
+const sequelize = new Sequelize(
+  databaseName,
+  databaseUsername,
+  databasePassword,
+  {
+    host: databaseHost,
+    dialect: 'postgres',
+    operatorsAliases: false,
+
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+
+    logging: false,
+  }
+)
 db.sequelize = sequelize
 
 const readModelFiles = () =>
@@ -43,7 +56,7 @@ const readModelFiles = () =>
 
 const bootstrap = () =>
   readModelFiles()
-    .then(() => db.sequelize.sync({ force: true }))
+    .then(() => db.sequelize.sync({ force: false }))
     .catch((err) => {
       console.error('Error bootstraping application')
       throw err
