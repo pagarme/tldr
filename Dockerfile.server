@@ -1,12 +1,13 @@
 FROM node:9.4-alpine
 
 RUN mkdir /tldr
+RUN mkdir /tldr/views
 
 COPY .env /tldr
-COPY scripts/migrate /tldr
 COPY package.json /tldr
 COPY yarn.lock /tldr
 COPY src /tldr
+COPY views /tldr/views
 
 WORKDIR /tldr
 
@@ -14,5 +15,5 @@ RUN yarn install
 
 EXPOSE 8888
 
-CMD ["sh", "-c", "node bin/worker.js"]
+CMD ["sh", "-c", "node bin/server.js"]
 

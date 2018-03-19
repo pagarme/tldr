@@ -1,8 +1,10 @@
-#!/bin/bash
+#!/bin/sh
+
+export $(cat .env | xargs)
 
 if [[ "x$1" = "xundo" ]]; then
-  docker-compose run app node_modules/.bin/sequelize db:migrate:undo --config src/config/database.js --migrations-path src/database/migrations/
+  node_modules/.bin/sequelize db:migrate:undo --config config/database.js --migrations-path database/migrations/
 else
-  docker-compose run app node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
+  node_modules/.bin/sequelize db:migrate --config config/database.js --migrations-path database/migrations/
 fi
 

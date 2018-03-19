@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const Promise = require('bluebird')
+const getConfig = require('../config/database')
 const Sequelize = require('sequelize')
 
 const fsPromise = Promise.promisifyAll(fs)
@@ -8,20 +9,24 @@ const db = {
   Sequelize,
 }
 
-const databaseHost = process.env.DATABASE_URL
-const databasePort = process.env.DATABASE_PORT
-const databaseName = process.env.DATABASE_NAME
-const databaseUsername = process.env.DATABASE_USERNAME
-const databasePassword = process.env.DATABASE_PASSWORD
+const {
+  host,
+  dialect,
+  database,
+  username,
+  password,
+  logging,
+  port,
+} = getConfig
 
 const sequelize = new Sequelize(
-  databaseName,
-  databaseUsername,
-  databasePassword,
+  database,
+  username,
+  password,
   {
-    host: databaseHost,
-    port: databasePort,
-    dialect: 'postgres',
+    host,
+    port,
+    dialect,
     operatorsAliases: false,
 
     pool: {
@@ -31,7 +36,7 @@ const sequelize = new Sequelize(
       idle: 10000,
     },
 
-    logging: false,
+    logging,
   }
 )
 db.sequelize = sequelize

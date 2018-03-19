@@ -65,6 +65,11 @@ module.exports = {
       },
     })
       .then(() =>
+        queryInterface.addIndex(tableName, ['id'], {
+          fields: ['id'],
+          unique: true,
+        }))
+      .then(() =>
         queryInterface.addIndex(tableName, ['transaction_id'], {
           fields: ['transaction_id'],
         }))
@@ -75,6 +80,10 @@ module.exports = {
       .then(() =>
         queryInterface.addIndex(tableName, ['receipt_id'], {
           fields: ['receipt_id'],
+        }))
+      .then(() =>
+        queryInterface.addIndex(tableName, ['seller_id'], {
+          fields: ['seller_id'],
         })),
 
   down: queryInterface =>
