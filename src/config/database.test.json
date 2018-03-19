@@ -1,0 +1,9 @@
+{
+  "host": "database-test",
+  "dialect": "postgres",
+  "database": "postgres",
+  "username": "postgres",
+  "password": "Tldr123$",
+  "port": 5432,
+  "logging": false
+}
