@@ -1,13 +1,7 @@
-const formatResponse = (data, error) => ({
-  data,
-  error,
-})
-
-const sendData = (req, res, statusCode, data) => {
-  const response = formatResponse(data)
-
-  return res.status(statusCode).send(response)
-}
+const sendData = (req, res, statusCode, data) =>
+  res.status(statusCode).send({
+    data,
+  })
 
 module.exports = {
   sendData,
