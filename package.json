@@ -13,7 +13,7 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true,
-    "testMatch": ["**/tests/**/*.js"]
+    "testMatch": ["**/tests/**/*.test.js"]
   },
   "bugs": {
     "url": "https://github.com/pagarme/tldr/issues"
@@ -30,8 +30,9 @@
     "eslint": "4.18.1",
     "eslint-config-pagarme-base": "2.0.0",
     "eslint-plugin-import": "2.9.0",
-    "jest": "22.4.0",
-    "sequelize-cli": "4.0.0"
+    "jest": "22.4.2",
+    "sequelize-cli": "4.0.0",
+    "supertest": "3.0.0"
   },
   "dependencies": {
     "aws-sdk": "2.203.0",
