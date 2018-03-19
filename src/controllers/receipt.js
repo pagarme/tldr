@@ -51,34 +51,6 @@ const render = (req, res) => {
     })
 }
 
-const render = (req, res) => {
-  const receiptId = req.params.receipt_id
-
-  return database.Receipt.findOne({
-    where: {
-      receipt_id: receiptId,
-    },
-  })
-    .then((receipt) => {
-      if (!receipt) {
-        return res.render(
-          'pages/404',
-          {
-            receiptId,
-          }
-        )
-      }
-
-      const receiptData = database.Receipt.responseObjectBuilder(receipt)
-      return res.render(
-        'pages/receipt',
-        {
-          receipt: receiptData,
-        }
-      )
-    })
-}
-
 module.exports = {
   show,
   render,
