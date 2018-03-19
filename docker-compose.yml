@@ -14,6 +14,13 @@ services:
     ports:
       - 5432
 
+  test-database:
+    image: postgres:9.6.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=Tldr123$$
+    ports:
+      - 5432
+
   yopa:
     image: pagarme/yopa:latest
     command: java -Xms64m -Xmx256m -jar uberjar.jar -c /tmp/yopa-in/config.yml -o /tmp/dev-env-aws-regions-override.xml
@@ -38,6 +45,9 @@ services:
     environment:
       - NODE_ENV=test
     command: yarn test
+    links:
+      - test-database
+      - yopa
 
   server:
     extends: base
