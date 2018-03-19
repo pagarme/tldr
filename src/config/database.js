@@ -39,7 +39,7 @@ const config = {
     logging: false,
   },
   test: {
-    host: 'database',
+    host: 'test-database',
     dialect: 'postgres',
     database: 'postgres',
     username: 'postgres',
