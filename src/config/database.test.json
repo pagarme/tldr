@@ -1,5 +1,5 @@
 {
-  "host": "database-test",
+  "host": "test-database",
   "dialect": "postgres",
   "database": "postgres",
   "username": "postgres",
