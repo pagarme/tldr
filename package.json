@@ -22,6 +22,7 @@
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "jest --verbose",
+    "coverage": "codecov",
     "start": "node src/bin/server.js",
     "start-worker": "node src/bin/worker.js"
   },
