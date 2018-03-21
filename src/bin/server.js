@@ -29,3 +29,4 @@ database.bootstrap()
     console.log(`Server ready and listening on port ${process.env.PORT}`)
   })
 
+module.exports = app
