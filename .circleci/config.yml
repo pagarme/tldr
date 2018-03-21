@@ -13,7 +13,8 @@ jobs:
           keys: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn install
       - run: yarn lint
-      - run: yarn test
+      - run: node_modules/.bin/sequelize db:migrate --config src/config/database.test.json --migrations-path src/database/migrations/
+      - run: yarn test && yarn codecov
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
