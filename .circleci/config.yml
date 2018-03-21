@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: circleci/node:9.4
+      - image: circleci/postgres:9.6.5-alpine
+        name: test-database
+
     working_directory: ~/tldr
     steps:
       - checkout
