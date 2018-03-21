@@ -21,7 +21,7 @@
   "homepage": "https://github.com/pagarme/tldr#readme",
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
-    "test": "jest && codecov",
+    "test": "jest --verbose",
     "start": "node src/bin/server.js",
     "start-worker": "node src/bin/worker.js"
   },
