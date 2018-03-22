@@ -6,6 +6,8 @@ const receiptController = require('../controllers/receipt')
 
 const app = express()
 
+app.disable('x-powered-by')
+
 app.set('view engine', 'ejs')
 
 app.get(
