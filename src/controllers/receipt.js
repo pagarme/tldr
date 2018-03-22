@@ -1,5 +1,4 @@
 const database = require('../database')
-const responseHelper = require('../helpers/response')
 
 const getLastReceipt = receiptId =>
   database.Receipt.findOne({
@@ -23,7 +22,9 @@ const show = (req, res) => {
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
 
-      return responseHelper.sendData(req, res, statusCode, receipt)
+      return res.status(statusCode).send({
+        receipt,
+      })
     })
 }
 
