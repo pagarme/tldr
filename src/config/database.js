@@ -30,12 +30,12 @@ if (process.env.APP_ENV === 'live') {
 
 const config = {
   development: {
-    host,
+    host: 'database',
     dialect: 'postgres',
-    database,
-    username,
-    password,
-    port,
+    database: 'postgres',
+    username: 'postgres',
+    password: 'Tldr123$',
+    port: 5432,
     logging: false,
   },
   test: {
