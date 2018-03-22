@@ -1,7 +1,3 @@
-const {
-  omit,
-} = require('ramda')
-
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {
     transaction_id: {
@@ -52,10 +48,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     underscored: true,
+    defaultScope: {
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'id'],
+      },
+    },
   })
-
-  Receipt.responseObjectBuilder = receipt =>
-    omit(['created_at', 'updated_at'], receipt.dataValues)
 
   return Receipt
 }
