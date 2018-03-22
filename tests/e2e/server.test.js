@@ -1,5 +1,5 @@
-const request = require('supertest')
 const app = require('../../src/bin/server')
+const request = require('supertest')
 const database = require('../../src/database')
 
 const receiptData = {
