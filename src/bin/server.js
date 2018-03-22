@@ -3,8 +3,12 @@ require('dotenv').config()
 const express = require('express')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
+const redirectHTTPMiddleware = require('../helpers/redirect-http')
 
 const app = express()
+
+const allRoutesExceptHealthCheck = /^\/(?!_health_check(\/|$)).*$/i
+app.use(allRoutesExceptHealthCheck, redirectHTTPMiddleware)
 
 app.disable('x-powered-by')
 
