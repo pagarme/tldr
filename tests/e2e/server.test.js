@@ -25,7 +25,7 @@ describe('API Tests', () => {
       .get('/api/receipt/abc-123')
       .then((response) => {
         expect(response.body).toEqual({
-          data: {
+          receipt: {
             transaction_id: 424242,
             receipt_id: 'abc-123',
             seller_id: 'loja123',
@@ -45,7 +45,7 @@ describe('API Tests', () => {
       .get('/api/receipt/invalid-receipt-id')
       .then((response) => {
         expect(response.body).toMatchObject({
-          data: {},
+          receipt: {},
         })
       }))
 
