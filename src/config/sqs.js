@@ -8,7 +8,7 @@ const config = {
     region: 'yopa-local',
   },
   test: {
-    endpoint: `http://${process.env.SQS_HOST}:47195`,
+    endpoint: 'http://yopa:47195',
     region: 'yopa-local',
   },
   production: {
