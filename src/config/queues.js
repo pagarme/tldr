@@ -21,7 +21,7 @@ const config = {
   },
   test: {
     receipts: {
-      endpoint,
+      endpoint: 'http://yopa:47195/queue/receipts',
       concurrency: 10,
     },
   },

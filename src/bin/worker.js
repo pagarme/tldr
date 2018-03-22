@@ -31,3 +31,4 @@ database.bootstrap()
     })
   })
 
+module.exports = app
