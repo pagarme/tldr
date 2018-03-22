@@ -1,4 +1,3 @@
-const { omit } = require('ramda')
 const database = require('../database')
 const responseHelper = require('../helpers/response')
 
@@ -15,7 +14,7 @@ const show = (req, res) => {
         return null
       }
 
-      return database.Receipt.responseObjectBuilder(receipt)
+      return receipt
     })
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
@@ -42,15 +41,10 @@ const render = (req, res) => {
         )
       }
 
-      const receiptData = omit(
-        ['id'],
-        database.Receipt.responseObjectBuilder(receipt)
-      )
-
       return res.render(
         'pages/receipt',
         {
-          receipt: receiptData,
+          receipt,
         }
       )
     })
