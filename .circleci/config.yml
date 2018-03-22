@@ -5,6 +5,8 @@ jobs:
       - image: circleci/node:8.9
       - image: circleci/postgres:9.6.5-alpine
         name: test-database
+      - image: pagarme/yopa:tldr
+        name: yopa
 
     working_directory: ~/tldr
     steps:
