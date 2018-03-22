@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    environment:
+      - NODE_ENV: "test"
     docker:
       - image: circleci/node:8.9
       - image: circleci/postgres:9.6.5-alpine
@@ -17,7 +19,7 @@ jobs:
             - v1-dependencies
       - run: yarn install
       - run: yarn lint
-      - run: node_modules/.bin/sequelize db:migrate --config src/config/database.test.json --migrations-path src/database/migrations/
+      - run: node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
       - run: yarn test && yarn codecov
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
