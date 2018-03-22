@@ -1,14 +1,18 @@
 const database = require('../database')
 const responseHelper = require('../helpers/response')
 
-const show = (req, res) => {
-  const receiptId = req.params.receipt_id
-
-  return database.Receipt.findOne({
+const getLastReceipt = receiptId =>
+  database.Receipt.findOne({
     where: {
       receipt_id: receiptId,
     },
+    order: database.sequelize.literal('event_date DESC'),
   })
+
+const show = (req, res) => {
+  const receiptId = req.params.receipt_id
+
+  return getLastReceipt(receiptId)
     .then((receipt) => {
       if (!receipt) {
         return null
@@ -26,11 +30,7 @@ const show = (req, res) => {
 const render = (req, res) => {
   const receiptId = req.params.receipt_id
 
-  return database.Receipt.findOne({
-    where: {
-      receipt_id: receiptId,
-    },
-  })
+  return getLastReceipt(receiptId)
     .then((receipt) => {
       if (!receipt) {
         return res.render(
