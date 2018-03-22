@@ -1,4 +1,3 @@
-// const { omit } = require('ramda')
 const database = require('../database')
 const responseHelper = require('../helpers/response')
 
