@@ -1,11 +1,9 @@
 #!/bin/bash
 
-DOT_ENV=".env.cloud"
+DOT_ENV=${DOT_ENV:-".env.cloud"}
 NODE_ENV="production"
 CMD_ARGS=""
 PORT=8888
-
-docker login
 
 docker build . -t "tldr:server" --build-arg PORT=8888 --build-arg DOT_ENV=".env" --build-arg NODE_ENV="production" --build-arg CMD_ARGS=""
 #docker run tldr:server
