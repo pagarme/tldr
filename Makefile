@@ -1,8 +1,4 @@
-build-base:
-  @docker build . -t tldr
-.PHONY: build
-
-build: build-base
+build:
 	@docker-compose build
 .PHONY: build
 
@@ -41,7 +37,7 @@ database:
 .PHONY: database
 
 setup-database:
-	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:create --config src/config/database.js" server
+	@docker-compose run server node_modules/.bin/sequelize db:create --config src/config/database.js
 .PHONY: setup-database
 
 migrate-database:
@@ -49,7 +45,7 @@ migrate-database:
 .PHONY: migrate-database
 
 migrate-undo-database:
-	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:migrate:undo --config src/config/database.js --migrations-path src/database/migrations/" server
+	@docker-compose run server node_modules/.bin/sequelize db:migrate:undo --config src/config/database.js --migrations-path src/database/migrations/
 .PHONY: migrate-undo-database
 
 server: database migrate-database

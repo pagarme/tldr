@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   base:
-    build: ./Dockerfile.tst
+    build: ./Dockerfile.test
     volumes:
       - .:/tldr
       - /tldr/node_modules
@@ -58,7 +58,10 @@ services:
       - yopa
 
   server:
-    extends: base
+    volumes:
+      - .:/tldr
+      - /tldr/node_modules
+    image: tldr:server
     command: yarn start
     environment:
       - NODE_ENV=development
@@ -71,10 +74,14 @@ services:
       - database
 
   worker:
-    extends: base
+    image: tldr:worker
     command: yarn start-worker
     environment:
       - NODE_ENV=development
+    ports:
+      - "8889:8889"
+    environment:
+      - PORT=8889
     links:
       - yopa
       - database
