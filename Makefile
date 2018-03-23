@@ -16,15 +16,15 @@ test-database:
 .PHONY: test-database
 
 test-setup-database:
-	@docker-compose run server node_modules/.bin/sequelize db:create --config src/config/database.js
+	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:create --config src/config/database.js" test
 .PHONY: test-setup-database
 
 test-migrate-database:
-	@docker-compose run test node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
+	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/" test
 .PHONY: test-migrate-database
 
 test-migrate-undo-database:
-	@docker-compose run test node_modules/.bin/sequelize db:migrate:undo --config src/config/database.js --migrations-path src/database/migrations/
+	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:migrate:undo --config src/config/database.js --migrations-path src/database/migrations/"  test
 .PHONY: test-migrate-undo-database
 
 test: test-database test-migrate-database yopa
@@ -41,7 +41,7 @@ setup-database:
 .PHONY: setup-database
 
 migrate-database:
-	@docker-compose run server node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
+	@docker-compose run --entrypoint="node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/" server
 .PHONY: migrate-database
 
 migrate-undo-database:
