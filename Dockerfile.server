@@ -9,6 +9,7 @@ COPY yarn.lock /tldr
 COPY src /tldr
 COPY views /tldr/views
 
+
 WORKDIR /tldr
 
 RUN yarn install
