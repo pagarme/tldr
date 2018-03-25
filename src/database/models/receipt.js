@@ -46,6 +46,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    card_brand: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    installments: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+    },
   }, {
     underscored: true,
     defaultScope: {
