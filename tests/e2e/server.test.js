@@ -36,6 +36,8 @@ describe('API Tests', () => {
             event_date: '2018-03-22T15:12:25.000Z',
             card_holder_name: 'Senny Bings',
             card_number_last_digits: '1234',
+            card_brand: 'VISA',
+            installments: 2,
           },
         })
       }))
@@ -64,7 +66,7 @@ describe('API Tests', () => {
   <body>
     Comprovante:
     <br />
-    {&#34;transaction_id&#34;:424242,&#34;receipt_id&#34;:&#34;abc-123&#34;,&#34;seller_id&#34;:&#34;loja123&#34;,&#34;seller_name&#34;:&#34;Loja 1 2 3&#34;,&#34;transaction_status&#34;:&#34;refunded&#34;,&#34;amount&#34;:987,&#34;payment_date&#34;:&#34;2018-03-02T10:12:25.000Z&#34;,&#34;event_date&#34;:&#34;2018-03-22T15:12:25.000Z&#34;,&#34;card_holder_name&#34;:&#34;Senny Bings&#34;,&#34;card_number_last_digits&#34;:&#34;1234&#34;}
+    {&#34;transaction_id&#34;:424242,&#34;receipt_id&#34;:&#34;abc-123&#34;,&#34;seller_id&#34;:&#34;loja123&#34;,&#34;seller_name&#34;:&#34;Loja 1 2 3&#34;,&#34;transaction_status&#34;:&#34;refunded&#34;,&#34;amount&#34;:987,&#34;payment_date&#34;:&#34;2018-03-02T10:12:25.000Z&#34;,&#34;event_date&#34;:&#34;2018-03-22T15:12:25.000Z&#34;,&#34;card_holder_name&#34;:&#34;Senny Bings&#34;,&#34;card_number_last_digits&#34;:&#34;1234&#34;,&#34;card_brand&#34;:&#34;VISA&#34;,&#34;installments&#34;:2}
   </body>
 </html>`.replace(/\n/g, '')
 
