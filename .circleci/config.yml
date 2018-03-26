@@ -25,7 +25,7 @@ jobs:
           paths:
             - node_modules
 
-  pre-deploy:
+  pre_deploy:
       machine:
           enabled: true
       steps:
@@ -104,13 +104,13 @@ jobs:
 
 workflows:
   version: 2
-  build-and-deploy:
+  build_and_deploy:
     jobs:
     - build:
         filters:
           tags:
             only: /^v.*/
-    - pre-deploy:
+    - pre_deploy:
         requires:
         - build
         filters:
@@ -118,36 +118,36 @@ workflows:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - prepare-stg:
+    - prepare_stg:
         requires:
         - build
-        - pre-deploy
+        - pre_deploy
         filters:
           branches:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - prepare-prd:
+    - prepare_prd:
         requires:
         - build
-        - pre-deploy
+        - pre_deploy
         filters:
           branches:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - build-images:
+    - build_images:
         requires:
-        - prepare-prd
-        - prepare-stg
+        - prepare_prd
+        - prepare_stg
         filters:
           branches:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_sandbox_stg:
+    - deploy_sandbox:
         requires:
-        - build-images
+        - build_images
         filters:
           branches:
             ignore: /.*/
@@ -162,7 +162,7 @@ workflows:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_live_stg:
+    - deploy_live:
         requires:
         - hold
         filters:
