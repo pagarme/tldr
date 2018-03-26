@@ -35,10 +35,12 @@ app.get(
   (req, res) => res.send()
 )
 
-database.bootstrap()
-  .then(() => app.listen(process.env.PORT))
-  .then(() => {
-    logger.info(`Server ready and listening on port ${process.env.PORT}`)
-  })
+if (process.env.NODE_ENV !== 'test') {
+  database.bootstrap()
+    .then(() => app.listen(process.env.PORT))
+    .then(() => {
+      logger.info(`Server ready and listening on port ${process.env.PORT}`)
+    })
+}
 
 module.exports = app
