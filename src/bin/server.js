@@ -4,11 +4,17 @@ const express = require('express')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
 const redirectHTTPMiddleware = require('../helpers/redirect-http')
+const log4js = require('log4js')
 
 const app = express()
+const logger = log4js.getLogger('SERVER')
+logger.level = 'ALL'
 
 const allRoutesExceptHealthCheck = /^\/(?!_health_check(\/|$)).*$/i
+
 app.use(allRoutesExceptHealthCheck, redirectHTTPMiddleware)
+
+app.use(log4js.connectLogger(logger, { level: 'auto' }))
 
 app.disable('x-powered-by')
 
@@ -32,7 +38,7 @@ app.get(
 database.bootstrap()
   .then(() => app.listen(process.env.PORT))
   .then(() => {
-    console.log(`Server ready and listening on port ${process.env.PORT}`)
+    logger.info(`Server ready and listening on port ${process.env.PORT}`)
   })
 
 module.exports = app
