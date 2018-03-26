@@ -6,12 +6,15 @@ const {
   processReceipt,
   ReceiptsQueue,
 } = require('../services/worker')
+const log4js = require('log4js')
 
 const app = express()
+const logger = log4js.getLogger('WORKER')
+
 app.get('/_health_check', (req, res) => res.send())
 
 ReceiptsQueue.on('error', (err) => {
-  console.error({
+  logger.error({
     status: 'failed',
     metadata: {
       error_name: err.name,
@@ -24,7 +27,7 @@ ReceiptsQueue.on('error', (err) => {
 database.bootstrap()
   .then(() => app.listen(process.env.PORT))
   .then(() => {
-    console.log('Worker is up!')
+    logger.info('Worker is up!')
 
     ReceiptsQueue.startProcessing(processReceipt, {
       keepMessages: true,
