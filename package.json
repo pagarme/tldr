@@ -13,7 +13,9 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true,
-    "testMatch": ["**/tests/**/*.test.js"]
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
   },
   "bugs": {
     "url": "https://github.com/pagarme/tldr/issues"
@@ -41,6 +43,7 @@
     "dotenv": "5.0.1",
     "ejs": "2.5.7",
     "express": "4.16.2",
+    "log4js": "2.5.3",
     "pg": "7.4.1",
     "pg-hstore": "2.3.2",
     "ramda": "0.25.0",
