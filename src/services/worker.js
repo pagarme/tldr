@@ -20,7 +20,7 @@ const processReceipt = (item, sqsMessage) => {
   console.log('Processing new item')
   console.log(JSON.stringify(item))
 
-  database.Receipt.create(item)
+  return database.Receipt.create(item)
     .then((receipt) => {
       console.log(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
 
@@ -31,7 +31,7 @@ const processReceipt = (item, sqsMessage) => {
       console.error('Error inserting entry')
       console.error(item)
 
-      throw err
+      return Promise.reject(new Error(err))
     })
 }
 

@@ -3,7 +3,7 @@ const Promise = require('bluebird')
 const request = require('supertest')
 const database = require('../../src/database')
 const { receiptData } = require('./helper')
-const { ReceiptsQueue } = require('../../src/services/worker')
+const { processReceipt, ReceiptsQueue } = require('../../src/services/worker')
 
 describe('Worker Tests', () => {
   beforeAll(async () => {
@@ -25,6 +25,9 @@ describe('Worker Tests', () => {
       },
     })
       .then(receipt => expect(receipt).not.toBeNull()))
+
+  test('Processing with invalid arguments should return an empty object', () =>
+    expect(processReceipt({}, {})).rejects.toThrowError('SequelizeValidationError'))
 
   afterAll(database.sequelize.close)
 })
