@@ -9,6 +9,8 @@ const receiptData = {
   event_date: '2018-03-22 15:12:25Z',
   card_holder_name: 'Wilk Coelho Maia',
   card_number_last_digits: '1234',
+  card_brand: 'VISA',
+  installments: 2,
 }
 
 module.exports = {
