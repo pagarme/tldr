@@ -70,7 +70,7 @@ jobs:
             command: |
               docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
               docker build -t build-w:latest ./Dockerfile.worker
-              docker build -t build-s:latest ./Dockerfile.worker
+              docker build -t build-s:latest ./Dockerfile.server
               #ecr-login
               eval $(aws ecr get-login --region us-east-1 --no-include-email)
               # build and push server
@@ -145,11 +145,6 @@ workflows:
             ignore: /.*/
           tags:
             only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-
-
-
-
-
     - deploy_sandbox_stg:
         requires:
         - build-images
