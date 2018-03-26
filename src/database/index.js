@@ -3,7 +3,9 @@ const path = require('path')
 const Promise = require('bluebird')
 const getConfig = require('../config/database')
 const Sequelize = require('sequelize')
+const log4js = require('log4js')
 
+const logger = log4js.getLogger('DATABASE')
 const fsPromise = Promise.promisifyAll(fs)
 const db = {
   Sequelize,
@@ -57,21 +59,21 @@ const readModelFiles = () =>
       }
     })
     .catch((err) => {
-      console.error('Error reading model files')
+      logger.error('Error reading model files')
       throw err
     })
 
 const bootstrap = () =>
   readModelFiles()
     .then(() => {
-      console.log('Attempting database authentication')
+      logger.info('Attempting database authentication')
       return db.sequelize.authenticate()
     })
     .then(() => {
-      console.log('Authentication successful')
+      logger.info('Authentication successful')
     })
     .catch((err) => {
-      console.error('Error bootstraping application')
+      logger.error('Error bootstraping application')
       throw err
     })
 db.bootstrap = bootstrap

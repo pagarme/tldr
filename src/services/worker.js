@@ -3,6 +3,7 @@ const database = require('../database')
 const { prop } = require('ramda')
 const { Queue } = require('sqs-quooler')
 const getConfig = require('../config/queues')
+const logger = require('log4js').getLogger('WORKER')
 
 const {
   endpoint,
@@ -16,21 +17,17 @@ const ReceiptsQueue = new Queue({
 })
 
 const processReceipt = (item, sqsMessage) => {
-  console.log()
-  console.log('Processing new item')
-  console.log(JSON.stringify(item))
+  logger.info(`Processing new item:\n${JSON.stringify(item)}`)
 
   return database.Receipt.create(item)
     .then((receipt) => {
-      console.log(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
+      logger.info(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
 
       return ReceiptsQueue.remove(sqsMessage)
     })
-    .then(() => console.log('Removed entry from queue'))
+    .then(() => logger.info('Removed entry from queue'))
     .catch((err) => {
-      console.error('Error inserting entry')
-      console.error(item)
-
+      logger.error(`Error inserting entry: \n${JSON.stringify(item)}`)
       return Promise.reject(new Error(err))
     })
 }
