@@ -6,7 +6,7 @@ const { receiptData } = require('./helper')
 describe('API Tests', () => {
   beforeAll(async () => {
     await database.bootstrap()
-    await database.Receipt.destroy({ where: {} })
+    await database.Receipt.truncate()
     await database.Receipt.create(receiptData)
   })
 
@@ -42,17 +42,21 @@ describe('API Tests', () => {
         })
       }))
 
-  test('GET `/api/receipt/:id` with invalid id should return no data', () =>
-    request(app)
+  test('GET `/api/receipt/:id` with invalid id should return no data', () => {
+    expect.assertions(2)
+    return request(app)
       .get('/api/receipt/invalid-receipt-id')
       .then((response) => {
+        expect(response.statusCode).toBe(404)
         expect(response.body).toMatchObject({
           data: {},
         })
-      }))
+      })
+  })
 
-  test('GET `/receipt/:id` with valid id should render receipt page', () =>
-    request(app)
+  test('GET `/receipt/:id` with valid id should render receipt page', () => {
+    expect.assertions(2)
+    return request(app)
       .get('/receipt/abc-123')
       .then((response) => {
         const text = response.text.replace(/\n/g, '')
@@ -70,11 +74,14 @@ describe('API Tests', () => {
   </body>
 </html>`.replace(/\n/g, '')
 
+        expect(response.statusCode).toBe(200)
         expect(text).toBe(expectedResult)
-      }))
+      })
+  })
 
-  test('GET `/receipt/:id` with invalid id should render 404 page', () =>
-    request(app)
+  test('GET `/receipt/:id` with invalid id should render 404 page', () => {
+    expect.assertions(2)
+    return request(app)
       .get('/receipt/invalid-receipt-id')
       .then((response) => {
         const text = response.text.replace(/\n/g, '')
@@ -91,8 +98,10 @@ describe('API Tests', () => {
   </body>
 </html>`.replace(/\n/g, '')
 
+        expect(response.statusCode).toBe(200)
         expect(text).toBe(expectedResult)
-      }))
+      })
+  })
 
   afterAll(database.sequelize.close)
 })
