@@ -174,7 +174,8 @@ workflows:
     - hold_all_stg:
         type: approval
         requires:
-          - deploy_sandbox_stg
+          - deploy_sandbox
+          - deploy_live
         filters:
           branches:
             ignore: /.*/
