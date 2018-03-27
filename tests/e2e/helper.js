@@ -11,6 +11,7 @@ const receiptData = {
   card_number_last_digits: '1234',
   card_brand: 'VISA',
   installments: 2,
+  phone_number: '+552227987654',
 }
 
 module.exports = {
