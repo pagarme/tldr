@@ -6,10 +6,9 @@ const {
   processReceipt,
   ReceiptsQueue,
 } = require('../services/worker')
-const log4js = require('log4js')
+const logger = require('../helpers/logger')('WORKER')
 
 const app = express()
-const logger = log4js.getLogger('WORKER')
 
 app.get('/_health_check', (req, res) => res.send())
 
