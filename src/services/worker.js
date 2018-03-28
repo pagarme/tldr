@@ -3,7 +3,7 @@ const database = require('../database')
 const { prop } = require('ramda')
 const { Queue } = require('sqs-quooler')
 const getConfig = require('../config/queues')
-const logger = require('log4js').getLogger('WORKER')
+const logger = require('../helpers/logger')('WORKER')
 
 const {
   endpoint,
