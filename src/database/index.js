@@ -3,9 +3,8 @@ const path = require('path')
 const Promise = require('bluebird')
 const getConfig = require('../config/database')
 const Sequelize = require('sequelize')
-const log4js = require('log4js')
+const logger = require('../helpers/logger')('DATABASE')
 
-const logger = log4js.getLogger('DATABASE')
 const fsPromise = Promise.promisifyAll(fs)
 const db = {
   Sequelize,
