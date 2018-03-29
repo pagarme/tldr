@@ -2,10 +2,14 @@ version: '2.1'
 
 services:
   base:
-    build: ./Dockerfile.test
+    build:
+      context: .
+      dockerfile: ./Dockerfile.local
     volumes:
       - .:/tldr
       - /tldr/node_modules
+    environment:
+      - DOT_ENV=./.env
 
   database:
     image: postgres:9.6.5-alpine
@@ -44,24 +48,13 @@ services:
     extends: base
     environment:
       - NODE_ENV=test
-      - DATABASE_URL=database
-      - DATABASE_PORT=5432
-      - DATABASE_NAME=postgres
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=Tldr123$$
-      - RECEIPTS_QUEUE_URL=http://yopa:47195/queue/receipts
-      - SQS_HOST=yopa
-      - PORT=8888
-    entrypoint: /tldr/node_modules/.bin/jest
+    command: yarn test
     links:
       - test-database
       - yopa
 
   server:
-    volumes:
-      - .:/tldr
-      - /tldr/node_modules
-    image: tldr:server
+    extends: base
     command: yarn start
     environment:
       - NODE_ENV=development
@@ -74,14 +67,10 @@ services:
       - database
 
   worker:
-    image: tldr:worker
+    extends: base
     command: yarn start-worker
     environment:
       - NODE_ENV=development
-    ports:
-      - "8889:8889"
-    environment:
-      - PORT=8889
     links:
       - yopa
       - database
