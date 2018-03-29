@@ -58,22 +58,22 @@ const readModelFiles = () =>
       }
     })
     .catch((err) => {
-      console.log('Error reading model files')
+      logger.error('Error reading model files')
       throw err
     })
 
 const bootstrap = () => {
-  console.log('Starting database bootstrap')
+  logger.info('Starting database bootstrap')
   return readModelFiles()
     .then(() => {
-      console.log('Attempting database authentication')
+      logger.info('Attempting database authentication')
       return db.sequelize.authenticate()
     })
     .then(() => {
-      console.log('Authentication successful')
+      logger.info('Authentication successful')
     })
     .catch((err) => {
-      console.log('Error bootstraping application')
+      logger.error('Error bootstraping application')
       throw err
     })
 }
