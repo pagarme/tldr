@@ -1,15 +1,14 @@
 version: 2
 jobs:
   build:
-    environment:
-      - NODE_ENV: "test"
     docker:
       - image: circleci/node:8.9
+        environment:
+          NODE_ENV: "test"
       - image: circleci/postgres:9.6.5-alpine
         name: test-database
       - image: pagarme/yopa:tldr
         name: yopa
-
     working_directory: ~/tldr
     steps:
       - checkout
@@ -18,10 +17,398 @@ jobs:
             - v1-dependencies-{{checksum "package.json"}}
             - v1-dependencies
       - run: yarn install
-      - run: yarn lint
+      # - run: yarn lint
       - run: node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
       - run: yarn test && yarn codecov
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
+  build_image:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - checkout
+      - run:
+          name: run custom images
+          command: |
+              mkdir -p images
+              docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+              echo  "ENTRYPOINT [\"sh\",\"-c\",\"/tldr/start_worker.sh\"]" >>  Dockerfile
+              docker build -t build-w:latest --build-arg NODE_ENV=production --build-arg DOT_ENV=.env.cloud .
+              git checkout Dockerfile
+              echo  "ENTRYPOINT [\"sh\",\"-c\",\"/tldr/start_server.sh\"]" >>  Dockerfile
+              docker build -t build-s:latest --build-arg NODE_ENV=production --build-arg DOT_ENV=.env.cloud .
+              docker save -o images/build-w.tar build-w:latest
+              docker save -o images/build-s.tar build-s:latest
+      - persist_to_workspace:
+          root: images
+          paths:
+             -  build-w.tar
+             -  build-s.tar
+  push_staging:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - attach_workspace:
+         at: ~/tldr/images
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            docker load -i ~/tldr/images/build-w.tar
+            docker load -i ~/tldr/images/build-s.tar
+            export AWS_ACCESS_KEY_ID=$STG_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$STG_AWS_SECRET_ACCESS_KEY
+            export AWS_ACCOUNT=$STG_AWS_ACCOUNT
+            #ecr-login
+            eval $(aws ecr get-login --region us-east-1 --no-include-email)
+            # build and push server
+            export STG_IMAGE_S="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER"
+            docker tag build-s:latest $STG_IMAGE_S:$CIRCLE_TAG
+            docker push $STG_IMAGE_S:$CIRCLE_TAG
+            # build and push worker
+            export STG_IMAGE_W="$AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER"
+            docker tag build-w:latest $STG_IMAGE_W:$CIRCLE_TAG
+            docker push $STG_IMAGE_W:$CIRCLE_TAG
+  push_production:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - attach_workspace:
+         at: ~/tldr/images
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            docker load -i ~/tldr/images/build-w.tar
+            docker load -i ~/tldr/images/build-s.tar
+            export AWS_ACCESS_KEY_ID=$PRD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PRD_AWS_SECRET_ACCESS_KEY
+            export AWS_ACCOUNT=$PRD_AWS_ACCOUNT
+            #ecr-login
+            eval $(aws ecr get-login --region us-east-1 --no-include-email)
+            # build and push server
+            export PRD_IMAGE_S="$PRD_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER"
+            docker tag build-s:latest $PRD_IMAGE_S:$CIRCLE_TAG
+            docker push $PRD_IMAGE_S:$CIRCLE_TAG
+            docker tag build-s:latest ${PRD_IMAGE_S}:latest
+            docker push ${PRD_IMAGE_S}:latest
+            # build and push worker
+            export PRD_IMAGE_W="$AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER"
+            docker tag build-w:latest $PRD_IMAGE_W:$CIRCLE_TAG
+            docker push $PRD_IMAGE_W:$CIRCLE_TAG
+            docker tag build-w:latest ${PRD_IMAGE_W}:latest
+            docker push ${PRD_IMAGE_W}:latest
+  deploy_sandbox_stg_s:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in sandbox
+            export STG_IMAGE_S="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$STG_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$STG_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_SANDBOX_S -i $STG_IMAGE_S --timeout $TIMEOUT
+  deploy_sandbox_stg_w:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in sandbox
+            export STG_IMAGE_W="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$STG_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$STG_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy  --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_SANDBOX_W -i $STG_IMAGE_W --timeout $TIMEOUT
+  deploy_sandbox_prd_s:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in sandbox
+            export PRD_IMAGE_S="$PRD_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$PRD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PRD_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy  --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_SANDBOX_S -i $PRD_IMAGE_S --timeout $TIMEOUT
+  deploy_sandbox_prd_w:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in sandbox
+            export PRD_IMAGE_W="$PRD_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$PRD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PRD_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_SANDBOX_W -i $PRD_IMAGE_W --timeout $TIMEOUT
+  deploy_live_stg_s:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in live
+            export STG_IMAGE_S="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$STG_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$STG_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_LIVE_S -i $STG_IMAGE_S --timeout $TIMEOUT
+  deploy_live_stg_w:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in live
+            export STG_IMAGE_W="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$STG_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$STG_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_LIVE_W -i $STG_IMAGE_W --timeout $TIMEOUT
+  deploy_live_prd_s:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in live
+            export PRD_IMAGE_S="$PRD_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$PRD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PRD_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_LIVE_S -i $PRD_IMAGE_S --timeout $TIMEOUT
+  deploy_live_prd_w:
+    working_directory: ~/tldr
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Prepare to deploy
+          command: |
+            mkdir -p ~/.local/bin
+            # install jq
+            curl -sSL -o ~/.local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/.local/bin/jq
+            # install ecs-deploy (in work version)
+            #waiting for pr https://github.com/silinternational/ecs-deploy/pull/129
+            curl -sSL -o ~/.local/bin/ecs-deploy https://raw.githubusercontent.com/kakakakakku/ecs-deploy/675e0e064bc20ad81634efdfe41d802fbe3c30e3/ecs-deploy && sudo chmod +x ~/.local/bin/ecs-deploy
+            pip install awscli --upgrade --user
+      - run:
+          name: prepare Deploy to fargate
+          command: |
+            # deploy in live
+            export PRD_IMAGE_W="$PRD_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER:$CIRCLE_TAG"
+            export AWS_ACCESS_KEY_ID=$PRD_AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$PRD_AWS_SECRET_ACCESS_KEY
+            export PATH=$HOME/.local/bin:$PATH # put aws in the path
+            ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_LIVE_W -i $PRD_IMAGE_W --timeout $TIMEOUT
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+    - build:
+        filters:
+          tags:
+            only: /^v.*/
+    - build_image:
+        requires:
+          - build
+        filters:
+          tags:
+            only: /^v.*/
+    - push_staging:
+        requires:
+          - build_image
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+    - deploy_sandbox_stg_s:
+        requires:
+        - push_staging
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+    - deploy_sandbox_stg_w:
+        requires:
+          - push_staging
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+    - deploy_live_stg_s:
+        requires:
+          - push_staging
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+    - deploy_live_stg_w:
+        requires:
+          - push_staging
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+    - hold:
+        type: approval
+        requires:
+          - deploy_live_stg_s
+          - deploy_live_stg_w
+          - deploy_sandbox_stg_s
+          - deploy_sandbox_stg_w
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - push_production:
+        requires:
+          - hold
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - deploy_sandbox_prd_s:
+        requires:
+        - push_production
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - deploy_sandbox_prd_w:
+        requires:
+        - push_production
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - hold_sandbox:
+        type: approval
+        requires:
+          - deploy_sandbox_prd_s
+          - deploy_sandbox_prd_w
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - deploy_live_prd_s:
+        requires:
+        - hold_sandbox
+        - push_production
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+    - deploy_live_prd_w:
+        requires:
+        - hold_sandbox
+        - push_production
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v([0-9]+).([0-9]+).([0-9]+)$/

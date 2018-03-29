@@ -1,3 +1,5 @@
+require('dotenv').config({path: process.env.DOTENV_PATH})
+
 const {
   getConfig,
 } = require('./')
@@ -8,25 +10,11 @@ let username
 let password
 let port
 
-if (process.env.APP_ENV === 'live') {
-  host = process.env.LIVE_DATABASE_URL
-  database = process.env.LIVE_DATABASE_NAME
-  username = process.env.LIVE_DATABASE_USERNAME
-  password = process.env.LIVE_DATABASE_PASSWORD
-  port = process.env.LIVE_DATABASE_PORT
-} else if (process.env.APP_ENV === 'sandbox') {
-  host = process.env.SANDBOX_DATABASE_URL
-  database = process.env.SANDBOX_DATABASE_NAME
-  username = process.env.SANDBOX_DATABASE_USERNAME
-  password = process.env.SANDBOX_DATABASE_PASSWORD
-  port = process.env.SANDBOX_DATABASE_PORT
-} else {
-  host = process.env.DATABASE_URL
-  database = process.env.DATABASE_NAME
-  username = process.env.DATABASE_USERNAME
-  password = process.env.DATABASE_PASSWORD
-  port = process.env.DATABASE_PORT
-}
+host = process.env.DATABASE_URL
+database = process.env.DATABASE_NAME
+username = process.env.DATABASE_USERNAME
+password = process.env.DATABASE_PASSWORD
+port = process.env.DATABASE_PORT
 
 const config = {
   development: {

@@ -1,8 +1,8 @@
-FROM node:8.9-alpine
+FROM pagarme/docker-nodejs:8.9
 
 RUN mkdir /tldr
 
-COPY .env /tldr
+COPY ./.env.cloud /tldr
 COPY scripts/migrate /tldr
 COPY package.json /tldr
 COPY yarn.lock /tldr
