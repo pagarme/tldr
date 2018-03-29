@@ -25,8 +25,8 @@
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "jest --verbose",
     "coverage": "codecov",
-    "start": "node -r dotenv/config src/bin/server.js dotenv_config_path=$DOTENV_PATH",
-    "start-worker": "node -r dotenv/config src/bin/worker.js dotenv_config_path=$DOTENV_PATH"
+    "start": "node src/bin/server.js",
+    "start-worker": "node src/bin/worker.js"
   },
   "devDependencies": {
     "codecov": "3.0.0",
