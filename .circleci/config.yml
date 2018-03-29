@@ -17,7 +17,7 @@ jobs:
             - v1-dependencies-{{checksum "package.json"}}
             - v1-dependencies
       - run: yarn install
-      # - run: yarn lint
+      - run: yarn lint
       - run: node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
       - run: yarn test && yarn codecov
       - save_cache:

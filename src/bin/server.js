@@ -1,6 +1,4 @@
 require('../helpers/newrelic').requireDeps()
-require('dotenv').config({path: process.env.DOTENV_PATH})
-
 const express = require('express')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
