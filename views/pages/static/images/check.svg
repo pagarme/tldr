@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/check@1x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="8.9999939 16.2 4.7999939 12 3.3999939 13.4 8.9999939 19 20.9999939 7 19.5999939 5.6"></polygon>
+    </defs>
+    <g id="icon/check" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="Shape" fill="#000000" xlink:href="#path-1"></use>
+        <g id="cor/verde-link" mask="url(#mask-2)">
+            <g transform="translate(-38.000000, -38.000000)" id="Cor-/-Verde-Link">
+                <g>
+                    <rect id="Cor" fill="#95C93D" x="0" y="0" width="100" height="100"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
