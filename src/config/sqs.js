@@ -4,7 +4,7 @@ const {
 
 const config = {
   development: {
-    endpoint: `http://${process.env.SQS_HOST}:47195`,
+    endpoint: process.env.SQS_HOST,
     region: 'yopa-local',
   },
   test: {
