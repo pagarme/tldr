@@ -17,17 +17,17 @@ const ReceiptsQueue = new Queue({
 })
 
 const processReceipt = (item, sqsMessage) => {
-  console.info(`Processing new item:\n${JSON.stringify(item)}`)
+  logger.info(`Processing new item:\n${JSON.stringify(item)}`)
 
   return database.Receipt.create(item)
     .then((receipt) => {
-      console.info(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
+      logger.info(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
 
       return ReceiptsQueue.remove(sqsMessage)
     })
-    .then(() => console.info('Removed entry from queue'))
+    .then(() => logger.info('Removed entry from queue'))
     .catch((err) => {
-      console.error(`Error inserting entry: \n${JSON.stringify(item)}`)
+      logger.error(`Error inserting entry: \n${JSON.stringify(item)}`)
       return Promise.reject(new Error(err))
     })
 }
