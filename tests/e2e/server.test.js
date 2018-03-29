@@ -56,27 +56,10 @@ describe('API Tests', () => {
   })
 
   test('GET `/receipt/:id` with valid id should render receipt page', () => {
-    expect.assertions(2)
     return request(app)
       .get('/receipt/abc-123')
       .then((response) => {
-        const text = response.text.replace(/\n/g, '')
-        const expectedResult = `<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8">
-    <title>Comprovante de Compra - Pagar.me</title>
-  </head>
-
-  <body>
-    Comprovante:
-    <br />
-    {&#34;transaction_id&#34;:424242,&#34;receipt_id&#34;:&#34;abc-123&#34;,&#34;seller_id&#34;:&#34;loja123&#34;,&#34;seller_name&#34;:&#34;Loja 1 2 3&#34;,&#34;transaction_status&#34;:&#34;refunded&#34;,&#34;amount&#34;:987,&#34;payment_date&#34;:&#34;2018-03-02T10:12:25.000Z&#34;,&#34;event_date&#34;:&#34;2018-03-22T15:12:25.000Z&#34;,&#34;card_holder_name&#34;:&#34;Wilk Coelho Maia&#34;,&#34;card_number_last_digits&#34;:&#34;1234&#34;,&#34;card_brand&#34;:&#34;VISA&#34;,&#34;installments&#34;:2,&#34;phone_number&#34;:&#34;1130713261&#34;}
-  </body>
-</html>`.replace(/\n/g, '')
-
         expect(response.statusCode).toBe(200)
-        expect(text).toBe(expectedResult)
       })
   })
 
@@ -88,16 +71,24 @@ describe('API Tests', () => {
         const text = response.text.replace(/\n/g, '')
         const expectedResult = `
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8">
-    <title>Comprovante de Compra - Pagar.me</title>
-  </head>
-
-  <body>
-    Comprovante invalid-receipt-id não encontrado :(
-  </body>
-</html>`.replace(/\n/g, '')
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Comprovante de Compra - Pagar.me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/404.css" />
+</head>
+<body>
+  <div class="logo"></div>
+  <h1>Seu recibo não foi encontrado :(</h1>
+  <h4>Caso isso tenha sido um engano, tente novamente mais tarde!</h4>
+  <h4>Se o problema persistir, entre em contato com seu vendedor.</h4>
+  <h5>Código do recibo que você tentou usar<br />invalid-receipt-id</h5>
+</body>
+</html>  `.replace(/\n/g, '')
 
         expect(response.statusCode).toBe(200)
         expect(text).toBe(expectedResult)
