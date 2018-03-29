@@ -9,7 +9,7 @@ services:
       - .:/tldr
       - /tldr/node_modules
     environment:
-      - DOTENV_PATH=.env
+      - DOT_ENV=./.env
 
   database:
     image: postgres:9.6.5-alpine
