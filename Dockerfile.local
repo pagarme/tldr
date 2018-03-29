@@ -20,7 +20,6 @@ FROM pagarme/docker-nodejs:8.9
 
 ENV APP_NAME 'tldr'
 ENV PORT 3000
-ENV DOTENV_PATH '/tldr/'
 
 COPY --from=0 /tldr /tldr
 
