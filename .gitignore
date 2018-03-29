@@ -4,6 +4,9 @@ logs
 *.log
 npm-debug.log*
 
+# Newrelic logs
+/newrelic_agent.log
+
 # Runtime data
 pids
 *.pid

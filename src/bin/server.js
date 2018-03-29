@@ -1,3 +1,4 @@
+require('../helpers/newrelic').requireDeps()
 require('dotenv').config({path: process.env.DOTENV_PATH})
 
 const express = require('express')
