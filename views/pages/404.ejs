@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8">
-    <title>Comprovante de Compra - Pagar.me</title>
-  </head>
-
-  <body>
-    Comprovante <%= receiptId %> não encontrado :(
-  </body>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Comprovante de Compra - Pagar.me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/404.css" />
+</head>
+<body>
+  <div class="logo"></div>
+  <h1>Seu recibo não foi encontrado :(</h1>
+  <h4>Caso isso tenha sido um engano, tente novamente mais tarde!</h4>
+  <h4>Se o problema persistir, entre em contato com seu vendedor.</h4>
+  <h5>Código do recibo que você tentou usar<br /><%= receiptId %></h5>
+</body>
 </html>
-
+  

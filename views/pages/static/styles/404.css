@@ -1,0 +1,21 @@
+body {
+  font-family: 'Hind', sans-serif;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+  margin: 10% 30% 50px 30%;
+}
+
+h1, h4, h5 {
+  color: #5c666a;
+  overflow-wrap: break-word;
+}
+
+.logo {
+  display: block;
+  width: 99px;
+  height: 29px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../images/pagarme.svg');
+}

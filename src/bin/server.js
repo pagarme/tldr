@@ -17,6 +17,7 @@ app.use(log4js.connectLogger(logger, { level: 'auto' }))
 app.disable('x-powered-by')
 
 app.set('view engine', 'ejs')
+app.use('/static', express.static('views/pages/static'))
 
 app.get(
   '/api/receipt/:receipt_id',
