@@ -1,0 +1,460 @@
+body {
+  font-family: 'Hind', sans-serif;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #5c666a;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  color: #5c666a;
+}
+
+/** HEADER **/
+.header {
+  order: 1
+}
+.header-parent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.header-parent-logo {
+  order: 1;
+  display: block;
+  width: 99px;
+  height: 29px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../images/pagarme.svg');
+}
+.header-parent-info {
+  order: 2
+}
+.header-parent-info-parent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-end;
+}
+.header-parent-info-parent-date {
+  order: 1
+}
+.header-parent-info-parent-name {
+  order: 2
+}
+.header-parent-info-parent-phone {
+  order: 3
+}
+
+/** MAIN TOP **/
+.main-top {
+  order: 2
+}
+.main-top-parent {
+  display: flex;
+  flex-direction: column;
+}
+.main-top-parent-check {
+  order: 1;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../images/check.svg');  
+}
+.main-top-parent-text {
+  order: 2
+}
+.main-top-parent-amount {
+  order: 3
+}
+.main-top-parent-amount-parent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: flex-start;
+  align-items: baseline;
+  overflow-wrap: break-word;
+}
+.main-top-parent-amount-parent-amount {
+  order: 1
+}
+.main-top-parent-amount-parent-installments {
+  order: 2
+}
+.main-top-parent-card {
+  order: 4
+}
+.main-top-parent-card-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.main-top-parent-card-parent-brand {
+  order: 1;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+/* small: 6.67 ratio */
+/* large: 4.72 ratio */
+.brand-visa {
+  background-image: url('../images/brands/visa.svg');
+}
+.brand-mastercard {
+  background-image: url('../images/brands/mastercard.svg')
+}
+.brand-hipercard {
+  background-image: url('../images/brands/hipercard.svg')
+}
+.brand-elo {
+  background-image: url('../images/brands/elo.svg');
+}
+.main-top-parent-card-parent-digits {
+  order: 2
+}
+.main-top-parent-approved {
+  order: 5
+}
+
+/** MIDDLE LINE **/
+.middle-line {
+  order: 3;
+  border: 1px solid #5c666a;
+  background-color: #5c666a;
+  opacity: 0.2;
+}
+
+/** MAIN BOT **/
+.main-bot {
+  order: 4
+}
+.main-bot-parent {
+  display: flex;
+  flex-direction: column;
+}
+.main-bot-parent-cod {
+  order: 1
+}
+.main-bot-parent-cod-parent {
+  display: flex;
+  flex-direction: column;
+}
+.main-bot-parent-cod-parent-text {
+  order: 1
+}
+.main-bot-parent-cod-parent-value {
+  order: 2
+}
+.main-bot-parent-register {
+  order: 2
+}
+.main-bot-parent-register-parent {
+  display: flex;
+  flex-direction: column;
+}
+.main-bot-parent-register-parent-text-one {
+  order: 1
+}
+.main-bot-parent-register-parent-text-two {
+  order: 2
+}
+.main-bot-parent-register-parent-text-two-parent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.main-bot-parent-register-parent-text-two-parent-text {
+  order: 1
+}
+.main-bot-parent-register-parent-text-two-parent-company {
+  order: 2
+}
+
+/** FOOTER **/
+.footer {
+  order: 5
+}
+.footer-parent {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: flex-end; /*center*/
+}
+.footer-parent-text {
+  order: 1
+}
+.footer-parent-link {
+  order: 2
+}
+
+/** FONT WEIGHTS **/
+.header-parent-info-parent-date {
+  font-weight: 700;
+}
+.header-parent-info-parent-name {
+  font-weight: 400;
+}
+.header-parent-info-parent-phone {
+  font-weight: 400;
+}
+
+.main-top-parent-text {
+  font-weight: 700;
+}
+.main-top-parent-amount-parent-amount {
+  font-weight: 700;
+}
+.main-top-parent-amount-parent-installments {
+  font-weight: 400;
+}
+.main-top-parent-card-parent-digits {
+  font-weight: 400;
+}
+.main-top-parent-approved {
+  font-weight: 400;
+}
+
+.main-bot-parent-cod-parent-text {
+  font-weight: 600;
+}
+.main-bot-parent-cod-parent-value {
+  font-weight: 300;
+}
+.main-bot-parent-register-parent-text-one {
+  font-weight: 400;
+}
+.main-bot-parent-register-parent-text-two-parent-text {
+  font-weight: 400;
+}
+.main-bot-parent-register-parent-text-two-parent-company {
+  font-weight: 600;
+}
+
+.footer-parent-text {
+  font-weight: 500;
+}
+.footer-parent-link {
+  font-weight: 400;
+}
+
+/* PHONE */
+@media only screen and (max-device-width : 767px) {
+  /* IMAGES */
+  .main-top-parent-check {
+    width: 46.6px;
+    height: 35.5px;
+  }
+  .brand-visa {
+    width: 24px;
+    height: 7.8px;
+  }
+  .brand-mastercard {
+    width: 22.49px;
+    height: 17.54px;
+  }
+  .brand-hipercard {
+    width: 25.65px;
+    height: 11.25px;
+  }
+  .brand-elo {
+    width: 16.79px;
+    height: 16.79px;
+  }
+
+  /** MARGINS **/
+  .header {
+    margin-top: 22px;
+  }
+  .header, .main-top, .main-bot {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  .header-parent-info-parent-date {
+    margin-bottom: 3px;
+  }
+  .main-top-parent-check {
+    margin-bottom: 22.9px;
+  }
+  .main-top-parent-text {
+    margin-bottom: 14px;
+  }
+  .main-top-parent-amount-parent-installments {
+    margin-left: 5px;
+  }
+  .main-top-parent-card-parent-brand {
+    margin-right: 6px;
+  }
+  .main-top-parent-approved {
+    margin-bottom: 4px;
+  }
+  .main-bot-parent-cod-parent {
+    margin-top: 44px;
+  }
+  .main-bot-parent-register-parent {
+    margin-top: 44px;
+  }
+  .main-bot-parent-register-parent-text-two-parent-company {
+    margin-left: 3px;
+  }
+  .footer {
+    margin-top: 49px;
+    margin-bottom: 17px;
+  }
+
+  /** TYPOGRAPHY **/
+  .header-parent-info-parent-date {
+    font-size: 12px;
+  }
+  .header-parent-info-parent-name, .header-parent-info-parent-phone {
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .main-top-parent-text {
+    font-size: 36px;
+    line-height: 40px;
+    letter-spacing: -0.5px;
+  }
+  .main-top-parent-amount-parent-amount {
+    font-size: 18px;
+  }
+  .main-top-parent-amount-parent-installments {
+    font-size: 12px;
+  }
+  .main-top-parent-card-parent-digits {
+    font-size: 12px;
+  }
+  .main-top-parent-approved {
+    font-size: 12px;
+  }
+  .main-bot-parent-cod-parent {
+    font-size: 12px;
+  }
+  .main-bot-parent-register-parent {
+    font-size: 12px;
+  }
+  .footer-parent {
+    font-size: 12px;
+    line-height: 19px;
+    letter-spacing: 0.49px;
+  }
+}
+
+/* TABLET AND PC */
+@media only screen and (min-device-width : 768px) {
+  /* IMAGES */
+  .main-top-parent-check {
+    width: 87px;
+    height: 66.2px;
+  }
+  .brand-visa {
+    width: 34px;
+    height: 11px;
+  }
+  .brand-mastercard {
+    width: 31.78px;
+    height: 24.79px;
+  }
+  .brand-hipercard {
+    width: 36.23px;
+    height: 15.89px;
+  }
+  .brand-elo {
+    width: 34.2px;
+    height: 34.2px;
+  }
+
+  /** MARGINS **/
+  .header {
+    margin-top: 16px;
+  }
+  .header {
+    margin-left: 24px;
+    margin-right: 88px;  
+  }
+  .main-top, .main-bot {
+    margin-left: 103px;
+    margin-right: 24px;
+  }
+  .header-parent-info-parent-date {
+    margin-bottom: 10px;
+  }
+  .main-top-parent-check {
+    margin-left: 15px;
+    margin-top: 40px;
+    margin-bottom: 32.8px;
+  }
+  .main-top-parent-text {
+    margin-bottom: 60px;
+    margin-right: 88px;
+  }
+  .main-top-parent-amount-parent-installments {
+    margin-left: 10px;
+  }
+  .main-top-parent-card-parent-brand {
+    margin-right: 6px;
+  }
+  .main-top-parent-approved {
+    margin-bottom: 26px;
+  }
+  .main-bot-parent-cod-parent {
+    margin-top: 32px;
+  }
+  .main-bot-parent-register-parent {
+    margin-top: 29px;
+  }
+  .main-bot-parent-register-parent-text-two-parent-company {
+    margin-left: 5px;
+  }
+  .footer {
+    margin-top: 84px;
+    margin-bottom: 47px;
+  }
+
+  /** TYPOGRAPHY **/
+  .header-parent-info-parent-date {
+    font-size: 18px;
+  }
+  .header-parent-info-parent-name, .header-parent-info-parent-phone {
+    font-size: 18px;
+    line-height: 23px;
+  }
+  .main-top-parent-text {
+    font-size: 60px;
+    line-height: 70px;
+    letter-spacing: -0.83px;
+  }
+  .main-top-parent-amount-parent-amount {
+    font-size: 36px;
+    line-height: 24px;
+  }
+  .main-top-parent-amount-parent-installments {
+    font-size: 18px;
+  }
+  .main-top-parent-card-parent-digits {
+    font-size: 18px;
+  }
+  .main-top-parent-approved {
+    font-size: 12px;
+  }
+  .main-bot-parent-cod-parent {
+    font-size: 18px;
+  }
+  .main-bot-parent-register-parent {
+    font-size: 18px;
+  }
+  .footer-parent {
+    font-size: 12px;
+    line-height: 19px;
+    letter-spacing: 0.49px;
+  }
+}

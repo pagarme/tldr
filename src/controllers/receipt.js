@@ -1,5 +1,8 @@
 const database = require('../database')
 const responseHelper = require('../helpers/response')
+const formatMoney = require('../lib/money')
+const formatPhone = require('../lib/phone')
+const formatDate = require('../lib/date')
 
 const getLastReceipt = receiptId =>
   database.Receipt.findOne({
@@ -41,10 +44,17 @@ const render = (req, res) => {
         )
       }
 
+      const receiptAmount = formatMoney(receipt.amount)
+      const receiptPhone = formatPhone(receipt.phone_number)
+      const receiptDate = formatDate(receipt.payment_date)
+
       return res.render(
         'pages/receipt',
         {
           receipt,
+          receiptAmount,
+          receiptPhone,
+          receiptDate,
         }
       )
     })
