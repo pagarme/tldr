@@ -1,9 +1,14 @@
-body {
-  font-family: 'Hind', sans-serif;
+html {
+  position: relative;
   max-width: 768px;
   margin: 0 auto;
   width: 100%;
-  margin: 10% 30% 50px 30%;
+}
+
+body {
+  font-family: 'Hind', sans-serif;
+  position: absolute;
+  top: 50%;
 }
 
 h1, h4, h5 {
@@ -18,4 +23,17 @@ h1, h4, h5 {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url('../images/pagarme.svg');
+}
+
+@media only screen and (min-device-width : 768px) and (max-device-width: 1366px) {
+  body {
+    transform: translateY(50%);
+    left: 20%;
+  }
+}
+
+@media only screen and (min-device-width : 1367px) {
+  body {
+    transform: translateY(50%);
+  }
 }
