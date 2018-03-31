@@ -68,10 +68,14 @@ jobs:
             export STG_IMAGE_S="$STG_AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_SERVER"
             docker tag build-s:latest $STG_IMAGE_S:$CIRCLE_TAG
             docker push $STG_IMAGE_S:$CIRCLE_TAG
+            docker tag build-s:latest ${PRD_IMAGE_S}:latest
+            docker push ${PRD_IMAGE_S}:latest
             # build and push worker
             export STG_IMAGE_W="$AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME_WORKER"
             docker tag build-w:latest $STG_IMAGE_W:$CIRCLE_TAG
             docker push $STG_IMAGE_W:$CIRCLE_TAG
+            docker tag build-w:latest ${PRD_IMAGE_W}:latest
+            docker push ${PRD_IMAGE_W}:latest
   push_production:
     working_directory: ~/tldr
     machine:
