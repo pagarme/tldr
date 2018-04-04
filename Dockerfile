@@ -5,6 +5,7 @@ ARG NODE_ENV
 ARG DOT_ENV
 
 COPY ${DOT_ENV} /tldr/${DOT_ENV}
+COPY newrelic.js /tldr
 COPY package.json /tldr
 COPY start_server.sh /tldr
 COPY start_worker.sh /tldr
