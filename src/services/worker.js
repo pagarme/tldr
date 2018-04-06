@@ -19,7 +19,7 @@ const ReceiptsQueue = new Queue({
 const processReceipt = (item, sqsMessage) => {
   logger.info(`Processing new item:\n${JSON.stringify(item)}`)
 
-  return database.Receipt.create(item)
+  return database.Receipt.create(item.data)
     .then((receipt) => {
       logger.info(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
 

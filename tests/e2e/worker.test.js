@@ -9,7 +9,7 @@ describe('Worker Tests', () => {
   beforeAll(async () => {
     await database.bootstrap()
     await database.Receipt.destroy({ where: {} })
-    await ReceiptsQueue.push(receiptData)
+    await ReceiptsQueue.push({ data: receiptData })
     await Promise.delay(500)
   })
 
