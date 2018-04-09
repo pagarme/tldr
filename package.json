@@ -44,6 +44,7 @@
     "ejs": "2.5.7",
     "express": "4.16.2",
     "log4js": "2.5.3",
+    "moment-timezone": "0.5.14",
     "newrelic": "3.3.0",
     "pg": "7.4.1",
     "pg-hstore": "2.3.2",
