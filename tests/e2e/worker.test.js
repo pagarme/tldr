@@ -26,6 +26,15 @@ describe('Worker Tests', () => {
     })
       .then(receipt => expect(receipt).not.toBeNull()))
 
+  test('`ReceiptsQueue` should have an error event listener', () => {
+    const eventError = ReceiptsQueue.emit('error', {
+      name: 'foo',
+      stack: '',
+      message: 'bar',
+    })
+    expect(eventError).toBeTruthy()
+  })
+
   test('Processing with invalid arguments should return an empty object', () =>
     expect(processReceipt({}, {})).rejects.toThrowError('SequelizeValidationError'))
 
