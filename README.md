@@ -29,18 +29,18 @@ Stuff we use:
 - **[Yarn](https://yarnpkg.com/en/)** as a package manager.
 
 ## Getting Started
-To get started, you should install **Docker** and **Docker Compose**.  
+To get started, you should install **Docker** and **Docker Compose**.
 
 Then, clone the repository:
 ```sh
 $ git clone git@github.com:pagarme/tldr
 ```
 
-You should create an `.env` file (you can use `.env.example` as a reference. Ideally, everything should work out-of-the-box with the example environment variables).  
+You should create an `.env` file (you can use `.env.example` as a reference. Ideally, everything should work out-of-the-box with the example environment variables).
 
 Now, you should set up your database, but only once. In order to do that, run the following:
 ```sh
-$ make setupdb
+$ make setup-database
 ```
 
 And you should be ready.
