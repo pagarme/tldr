@@ -1,3 +1,0 @@
-FROM tldr
-
-RUN yarn install
