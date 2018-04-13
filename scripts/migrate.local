@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [[ "x$1" = "xundo" ]]; then
-  docker-compose run server node_modules/.bin/sequelize db:migrate:undo --config src/config/database.local.json --migrations-path src/database/migrations/
-else
-  docker-compose run server node_modules/.bin/sequelize db:migrate --config src/config/database.local.json --migrations-path src/database/migrations/
-fi
-
