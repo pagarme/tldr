@@ -7,12 +7,11 @@ ARG DOT_ENV
 COPY ${DOT_ENV} /tldr/${DOT_ENV}
 COPY newrelic.js /tldr
 COPY package.json /tldr
-COPY start_server.sh /tldr
-COPY start_worker.sh /tldr
+COPY scripts/start_server.sh /tldr
+COPY scripts/start_worker.sh /tldr
 COPY yarn.lock /tldr
 COPY src /tldr
 COPY views /tldr/views
-COPY scripts/migrate /tldr
 
 WORKDIR /tldr
 
