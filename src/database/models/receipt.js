@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    cvm_pin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
