@@ -30,7 +30,7 @@
         <div class="main-top-parent-amount">
           <div class="main-top-parent-amount-parent">
             <div class="main-top-parent-amount-parent-amount">R$ <%= receiptAmount %></div>
-            <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>    
+            <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>
           </div>
         </div>
         <div class="main-top-parent-card">
@@ -49,7 +49,11 @@
             <div class="main-top-parent-card-parent-digits">Final <%= receipt.card_number_last_digits %></div>
           </div>
         </div>
-        <div class="main-top-parent-approved">Transação autorizada mediante uso de senha pessoal.</div>
+
+        <% if (receipt.cvm_pin) { %>
+          <div class="main-top-parent-approved">Transação autorizada mediante uso de senha pessoal.</div>
+        <% } %>
+
       </div>
     </div>
     <div class="middle-line"></div>
