@@ -39,6 +39,7 @@ describe('API Tests', () => {
             card_brand: 'VISA',
             installments: 2,
             phone_number: '1130713261',
+            cvm_pin: true,
           },
         })
       }))
