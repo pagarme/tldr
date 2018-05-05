@@ -27,8 +27,16 @@ const processReceipt = (item, sqsMessage) => {
     })
     .then(() => logger.info('Removed entry from queue'))
     .catch((err) => {
-      logger.error(`Error inserting entry: \n${JSON.stringify(item)}`)
-      return Promise.reject(new Error(err))
+      logger.error(`Error inserting entry:\n${JSON.stringify(item)}`)
+      const error = {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+      }
+
+      logger.error(JSON.stringify(error))
+
+      return null
     })
 }
 
