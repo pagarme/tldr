@@ -35,8 +35,9 @@ describe('Worker Tests', () => {
     expect(eventError).toBeTruthy()
   })
 
-  test('Processing with invalid arguments should return an empty object', () =>
-    expect(processReceipt({}, {})).rejects.toThrowError('SequelizeValidationError'))
+  test('Processing with invalid arguments should not crash application', () =>
+    processReceipt({}, {})
+      .then(result => expect(result).toBe(null)))
 
   afterAll(database.sequelize.close)
 })
