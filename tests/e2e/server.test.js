@@ -40,6 +40,7 @@ describe('API Tests', () => {
             installments: 2,
             phone_number: '+552227987654',
             cvm_pin: true,
+            payment_method: 'credit_card',
           },
         })
       }))

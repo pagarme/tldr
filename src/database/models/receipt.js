@@ -63,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: true,
     },
+    payment_method: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
