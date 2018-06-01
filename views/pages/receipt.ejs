@@ -30,7 +30,11 @@
         <div class="main-top-parent-amount">
           <div class="main-top-parent-amount-parent">
             <div class="main-top-parent-amount-parent-amount">R$ <%= receiptAmount %></div>
-            <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>
+            <% if (receipt.payment_method === "debit_card") { %>
+              <div class="main-top-parent-amount-parent-installments">no débito</div>
+            <% } else { %>
+              <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>
+            <% } %>
           </div>
         </div>
         <div class="main-top-parent-card">
@@ -70,7 +74,11 @@
             <div class="main-bot-parent-register-parent-text-one">Este pagamento será registrado</div>
             <div class="main-bot-parent-register-parent-text-two">
               <div class="main-bot-parent-register-parent-text-two-parent">
-                <div class="main-bot-parent-register-parent-text-two-parent-text">na fatura do seu cartão como</div>
+                <% if (receipt.payment_method === "debit_card") { %>
+                  <div class="main-bot-parent-register-parent-text-two-parent-text">no seu extrato como</div>
+                <% } else { %>
+                  <div class="main-bot-parent-register-parent-text-two-parent-text">na fatura do seu cartão como</div>
+                <% } %>
                 <div class="main-bot-parent-register-parent-text-two-parent-company"><%= receiptSellerName %></div>
               </div>
             </div>
