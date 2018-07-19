@@ -30,7 +30,7 @@
         <div class="main-top-parent-amount">
           <div class="main-top-parent-amount-parent">
             <div class="main-top-parent-amount-parent-amount">R$ <%= receiptAmount %></div>
-            <% if (receipt.payment_method === "debit_card") { %>
+            <% if (receiptPaymentMethod === "Débito") { %>
               <div class="main-top-parent-amount-parent-installments">no débito</div>
             <% } else { %>
               <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>
