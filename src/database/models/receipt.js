@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    capture_method: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
