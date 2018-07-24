@@ -16,6 +16,7 @@ const receiptData = {
   payment_method: 'credit_card',
   capture_method: 'emv',
   authorization_code: '4DDP1X',
+  aid: '02199520',
 }
 
 module.exports = {

@@ -43,6 +43,7 @@ describe('API Tests', () => {
             payment_method: 'credit_card',
             capture_method: 'emv',
             authorization_code: '4DDP1X',
+            aid: '02199520',
           },
         })
       }))
