@@ -6,7 +6,7 @@ describe('Capture Method Lib', () => {
   })
 
   test('formatCaptureMethod should return \'ONL-MAG\' when capture_method is \'magstripe\'', () => {
-    expect(formatCaptureMethod('debit_card')).toBe('DÉBITO')
+    expect(formatCaptureMethod('magstripe')).toBe('ONL-MAG')
   })
 
   test('formatCaptureMethod should return \'DESCONHECIDO\' when capture_method is invalid', () => {
