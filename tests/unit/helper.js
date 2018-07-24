@@ -18,7 +18,28 @@ const receiptData = {
   authorization_code: '4DDP1X',
   aid: '02199520',
   application_cryptogram: '5EC8B98ABC8F9E7597647CBCB9A75400',
-  soft_descriptor: 'pg* Loja 1 2 3',
+  soft_descriptor: 'Loja 1 2 3',
+  statement_descriptor: 'pg* Loja 1 2 3',
 }
 
-module.exports = { receiptData }
+const mockReceiptDescriptorOne = {
+  statement_descriptor: 'pg *The Functional Dre',
+  soft_descriptor: 'The Functional Dream',
+  seller_name: 'The Functional Dream',
+}
+
+const mockReceiptDescriptorTwo = {
+  soft_descriptor: 'The Functional Dream',
+  seller_name: 'The Functional Dream',
+}
+
+const mockReceiptDescriptorThree = {
+  seller_name: 'The Functional Dream',
+}
+
+module.exports = {
+  receiptData,
+  mockReceiptDescriptorOne,
+  mockReceiptDescriptorTwo,
+  mockReceiptDescriptorThree,
+}
