@@ -75,6 +75,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    aid: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    application_cryptogram: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
