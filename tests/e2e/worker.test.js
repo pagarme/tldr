@@ -10,7 +10,7 @@ describe('Worker Tests', () => {
     await database.bootstrap()
     await database.Receipt.destroy({ where: {} })
     await ReceiptsQueue.push(receiptData)
-    await Promise.delay(500)
+    await Promise.delay(2500)
   })
 
   test('GET `/_health_check` should respond with status code `200`', () =>
