@@ -41,6 +41,7 @@ describe('API Tests', () => {
             phone_number: '+552227987654',
             cvm_pin: true,
             payment_method: 'credit_card',
+            capture_method: 'emv',
           },
         })
       }))
