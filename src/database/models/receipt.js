@@ -87,6 +87,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    statement_descriptor: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
