@@ -42,6 +42,7 @@ describe('API Tests', () => {
             cvm_pin: true,
             payment_method: 'credit_card',
             capture_method: 'emv',
+            authorization_code: '4DDP1X',
           },
         })
       }))
