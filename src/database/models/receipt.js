@@ -83,6 +83,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    soft_descriptor: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true,
     defaultScope: {
@@ -94,4 +98,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return Receipt
 }
-
