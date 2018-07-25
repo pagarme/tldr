@@ -18,7 +18,8 @@ const receiptData = {
   authorization_code: '4DDP1X',
   aid: '02199520',
   application_cryptogram: '5EC8B98ABC8F9E7597647CBCB9A75400',
-  soft_descriptor: 'pg* loja123',
+  soft_descriptor: 'loja123',
+  statement_descriptor: 'pg* loja123',
 }
 
 module.exports = {

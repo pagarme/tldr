@@ -5,6 +5,7 @@ const formatDate = require('../../src/lib/date')
 const formatPaymentMethod = require('../../src/lib/payment-method')
 const formatCaptureMethod = require('../../src/lib/capture-method')
 const formatCardBrand = require('../../src/lib/card-brand')
+const pickDescriptor = require('../../src/lib/descriptor')
 const { receiptData } = require('./helper')
 
 const TEMPLATE_PATH = './views/pages/receipt.ejs'
@@ -23,6 +24,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
+        receiptDescriptor: pickDescriptor(receipt),
         receipt,
       }
 
@@ -105,6 +107,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
+        receiptDescriptor: pickDescriptor(receipt),
         receipt,
       }
 
@@ -132,7 +135,7 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('no seu extrato como'))
     })
 
-    test('should have soft descriptor \'pg* Loja 1 2 3\'', () => {
+    test('should have statement descriptor \'pg* Loja 1 2 3\'', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('pg* Loja 1 2 3'))
     })
 
@@ -168,7 +171,7 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('ONL-CHIP'))
     })
 
-    test('should have line \'Transação autorizada mediante uso de senha pessoal', () => {
+    test('should have line \'Transação autorizada mediante uso de senha pessoal\'', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('Transação autorizada mediante uso de senha pessoal'))
     })
   })
@@ -187,6 +190,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
+        receiptDescriptor: pickDescriptor(receipt),
         receipt,
       }
 
@@ -214,7 +218,7 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('na fatura do seu cartão como'))
     })
 
-    test('should have soft descriptor \'pg* Loja 1 2 3\'', () => {
+    test('should have statement descriptor \'pg* Loja 1 2 3\'', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('pg* Loja 1 2 3'))
     })
 
