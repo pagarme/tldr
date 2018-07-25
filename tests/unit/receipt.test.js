@@ -36,6 +36,10 @@ describe('Rendered receipt template', () => {
           rmWhitespace: true,
         },
         (err, str) => {
+          if (err) {
+            throw err
+          }
+
           renderedTemplate = str
         }
       )
@@ -121,6 +125,9 @@ describe('Rendered receipt template', () => {
           rmWhitespace: true,
         },
         (err, str) => {
+          if (err) {
+            throw err
+          }
           renderedTemplate = str
         }
       )
@@ -209,6 +216,9 @@ describe('Rendered receipt template', () => {
           rmWhitespace: true,
         },
         (err, str) => {
+          if (err) {
+            throw err
+          }
           renderedTemplate = str
         }
       )
