@@ -4,7 +4,9 @@ services:
   base:
     build:
       context: .
-      dockerfile: ./Dockerfile.local
+      args:
+        DOT_ENV: .env
+        NODE_ENV: development
     volumes:
       - .:/tldr
       - /tldr/node_modules
