@@ -44,7 +44,7 @@
     "express": "4.16.2",
     "log4js": "2.5.3",
     "moment-timezone": "0.5.14",
-    "newrelic": "3.3.0",
+    "newrelic": "4.6.0",
     "pg": "7.4.1",
     "ramda": "0.25.0",
     "sequelize": "4.33.4",
