@@ -25,6 +25,7 @@ describe('Rendered receipt template', () => {
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
         receiptDescriptor: pickDescriptor(receipt),
+        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
 
@@ -109,6 +110,7 @@ describe('Rendered receipt template', () => {
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
         receiptDescriptor: pickDescriptor(receipt),
+        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
 
@@ -196,6 +198,7 @@ describe('Rendered receipt template', () => {
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
         receiptDescriptor: pickDescriptor(receipt),
+        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
 
