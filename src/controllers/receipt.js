@@ -55,6 +55,7 @@ const render = (req, res) => {
       const receiptCaptureMethod = formatCaptureMethod(receipt.capture_method)
       const receiptCardBrand = formatCardBrand(receipt.card_brand)
       const receiptDescriptor = pickDescriptor(receipt)
+      const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
 
       return res.render(
         'pages/receipt',
@@ -67,6 +68,7 @@ const render = (req, res) => {
           receiptCaptureMethod,
           receiptCardBrand,
           receiptDescriptor,
+          receiptLowerCardBrand,
         }
       )
     })
