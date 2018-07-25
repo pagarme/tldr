@@ -76,26 +76,7 @@ describe('API Tests', () => {
       .get('/receipt/invalid-receipt-id')
       .then((response) => {
         const text = response.text.replace(/\n/g, '')
-        const expectedResult = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Comprovante de Compra - Pagar.me</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="/static/images/favicon.png">
-  <link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/404.css" />
-</head>
-<body>
-  <div class="logo"></div>
-  <h1>Seu recibo não foi encontrado :(</h1>
-  <h4>Caso isso tenha sido um engano, tente novamente mais tarde!</h4>
-  <h4>Se o problema persistir, entre em contato com seu vendedor.</h4>
-  <h5>Código do recibo que você tentou usar<br />invalid-receipt-id</h5>
-</body>
-</html>  `.replace(/\n/g, '')
+        const expectedResult = `<!DOCTYPE html><html><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>Comprovante de Compra - Pagar.me</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=/static/images/favicon.png><link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/static/styles/404.css></head><body><div class=logo></div><h1>Seu recibo não foi encontrado :(</h1><h4>Caso isso tenha sido um engano, tente novamente mais tarde!</h4><h4>Se o problema persistir, entre em contato com seu vendedor.</h4><h5>Código do recibo que você tentou usar<br>invalid-receipt-id</h5></body></html>`
 
         expect(response.statusCode).toBe(200)
         expect(text).toBe(expectedResult)
