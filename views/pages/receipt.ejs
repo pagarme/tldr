@@ -371,12 +371,18 @@
                                                   R$ <%= receiptAmount %>
                                                 </strong>
                                               </span>
-                                              <span style="color:#333333;">
+                                              <% if (receipt.payment_method === "debit_card") { %>
+                                                <strong style="font-size:30px">
+                                                  à vista
+                                                </strong>
+                                              <% } else { %>
+                                                <span style="color:#333333;">
                                                 <span style="font-size:18px;">em</span>
                                                 <strong style="font-size:30px">
                                                   <%= receipt.installments %>x
                                                 </strong>
-                                              </span>
+                                                </span>
+                                              <% } %>
                                             </p>
                                           </td>
                                         </tr>

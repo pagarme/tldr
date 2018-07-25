@@ -98,6 +98,7 @@ describe('Rendered receipt template', () => {
 
     beforeAll(async () => {
       const receipt = Object.assign({}, receiptData)
+
       receipt.payment_method = 'debit_card'
 
       const data = {
@@ -143,8 +144,12 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('9,87'))
     })
 
-    test('should have installments \'2\'', () => {
-      expect(renderedTemplate).toEqual(expect.stringContaining('2'))
+    test('should have \'à vista\' line', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('à vista'))
+    })
+
+    test('should not have installments \'2x\'', () => {
+      expect(renderedTemplate).not.toEqual(expect.stringContaining('2x'))
     })
 
     test('should have \'Bandeira\' \'Visa Crédito\'', () => {
