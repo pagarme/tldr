@@ -7,6 +7,7 @@ const formatPaymentMethod = require('../lib/payment-method')
 const formatCaptureMethod = require('../lib/capture-method')
 const formatCardBrand = require('../lib/card-brand')
 const pickDescriptor = require('../lib/descriptor')
+const templateVersion = require('../lib/template-version')
 
 const getLastReceipt = receiptId =>
   database.Receipt.findOne({
@@ -57,8 +58,10 @@ const render = (req, res) => {
       const receiptDescriptor = pickDescriptor(receipt)
       const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
 
+      const receiptVersion = templateVersion(receipt)
+
       return res.render(
-        'pages/receipt-v2',
+        `pages/${receiptVersion}`,
         {
           receipt,
           receiptAmount,
