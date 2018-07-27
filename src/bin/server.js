@@ -1,6 +1,7 @@
 require('dotenv').config({ path: process.env.DOTENV_PATH })
 require('newrelic')
 const express = require('express')
+const minify = require('express-minify-html')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
 const redirectHTTPMiddleware = require('../helpers/redirect-http')
@@ -15,6 +16,20 @@ app.use(allRoutesExceptHealthCheck, redirectHTTPMiddleware)
 app.use(log4js.connectLogger(logger, { level: 'auto' }))
 
 app.disable('x-powered-by')
+
+app.use(minify({
+  override: true,
+  exception_url: false,
+  htmlMinifier: {
+    removeComments: true,
+    collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
+    removeEmptyAttributes: true,
+    minifyJS: true,
+    minifyCSS: true,
+  },
+}))
 
 app.set('view engine', 'ejs')
 app.use('/static', express.static('views/pages/static'))
