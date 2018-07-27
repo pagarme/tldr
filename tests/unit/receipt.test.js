@@ -8,7 +8,7 @@ const formatCardBrand = require('../../src/lib/card-brand')
 const pickDescriptor = require('../../src/lib/descriptor')
 const { receiptData } = require('./helper')
 
-const TEMPLATE_PATH = './views/pages/receipt.ejs'
+const TEMPLATE_PATH = './views/pages/receipt-v2.ejs'
 
 describe('Rendered receipt template', () => {
   describe('with a credit card', () => {

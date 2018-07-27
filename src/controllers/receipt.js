@@ -58,7 +58,7 @@ const render = (req, res) => {
       const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
 
       return res.render(
-        'pages/receipt',
+        'pages/receipt-v2',
         {
           receipt,
           receiptAmount,
