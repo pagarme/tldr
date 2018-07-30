@@ -26,7 +26,12 @@ const show = (req, res) => {
         return null
       }
 
-      return receipt
+      const receiptData = receipt
+
+      receiptData.soft_descriptor = pickDescriptor(receipt)
+      receiptData.statement_descriptor = null
+
+      return receiptData
     })
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
