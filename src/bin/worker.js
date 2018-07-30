@@ -6,14 +6,16 @@ const {
   processReceipt,
   ReceiptsQueue,
 } = require('../services/worker')
-const logger = require('../helpers/logger')('WORKER')
+const { httpLogger, logger } = require('../helpers/escriba')
 
 const app = express()
+
+app.use(httpLogger)
 
 app.get('/_health_check', (req, res) => res.send())
 
 ReceiptsQueue.on('error', (err) => {
-  logger.error({
+  logger.error('Error on queue', {
     status: 'failed',
     metadata: {
       error_name: err.name,
