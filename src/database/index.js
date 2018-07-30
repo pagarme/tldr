@@ -3,7 +3,7 @@ const path = require('path')
 const Promise = require('bluebird')
 const getConfig = require('../config/database')
 const Sequelize = require('sequelize')
-const logger = require('../helpers/logger')('DATABASE')
+const { logger } = require('../helpers/escriba')
 
 const fsPromise = Promise.promisifyAll(fs)
 const db = {
