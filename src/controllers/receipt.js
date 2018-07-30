@@ -8,14 +8,20 @@ const formatCaptureMethod = require('../lib/capture-method')
 const formatCardBrand = require('../lib/card-brand')
 const pickDescriptor = require('../lib/descriptor')
 const templateVersion = require('../lib/template-version')
+const { logger } = require('../helpers/escriba')
 
-const getLastReceipt = receiptId =>
-  database.Receipt.findOne({
+const getLastReceipt = (receiptId) => {
+  logger.info('Retrieving receipt', {
+    receiptId,
+  })
+
+  return database.Receipt.findOne({
     where: {
       receipt_id: receiptId,
     },
     order: database.sequelize.literal('event_date DESC'),
   })
+}
 
 const show = (req, res) => {
   const receiptId = req.params.receipt_id
@@ -23,6 +29,10 @@ const show = (req, res) => {
   return getLastReceipt(receiptId)
     .then((receipt) => {
       if (!receipt) {
+        logger.error('Receipt not found in database', {
+          receiptId,
+        })
+
         return null
       }
 
@@ -31,7 +41,18 @@ const show = (req, res) => {
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
 
+      logger.info('Retrieved receipt', {
+        receiptId,
+        receipt,
+      })
+
       return responseHelper.sendData(req, res, statusCode, receipt)
+    })
+    .catch((err) => {
+      logger.error('Error while retrieving receipt', {
+        receiptId,
+        err,
+      })
     })
 }
 
@@ -40,6 +61,11 @@ const render = (req, res) => {
 
   return getLastReceipt(receiptId)
     .then((receipt) => {
+      logger.info('Rendering receipt', {
+        receiptId,
+        receipt,
+      })
+
       if (!receipt) {
         return res.render(
           'pages/404',
@@ -74,6 +100,12 @@ const render = (req, res) => {
           receiptLowerCardBrand,
         }
       )
+    })
+    .catch((err) => {
+      logger.error('Error while rendering receipt', {
+        receiptId,
+        err,
+      })
     })
 }
 
