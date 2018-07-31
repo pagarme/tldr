@@ -46,7 +46,7 @@ $ make setup-database
 And you should be ready.
 
 # Running Locally
-To run locally, simply do the following command:
+To run locally, simply run the following command:
 ```sh
 $ make all
 ```
@@ -54,11 +54,10 @@ This will pull and build all images necessary, as well as starting all container
 By default, the server is located at `localhost:8888`.
 
 # Running Tests
-To run our tests, do:
+To run our tests, run the following command:
 ```sh
 $ make test
 ```
-And everything will be taken care of, and the tests will be ran.
 
 ## Available Routes
 Our default routes are:
@@ -84,7 +83,15 @@ Response sample:
         "card_number_last_digits": "7782",
         "card_brand": "visa",
         "installments": 2,
-        "phone_number": "+5511987654321"
+        "phone_number": "+5511987654321",
+        "cvm_pin": true,
+        "payment_method": "credit_card",
+        "capture_method": "emv",
+        "authorization_code": "4DDP1X",
+        "aid": "02199520",
+        "application_cryptogram": "5EC8B98ABC8F9E7597647CBCB9A75400",
+        "soft_descriptor": "Loja 1 2 3",
+        "statement_descriptor": "pg* Loja 1 2 3"
     }
 }
 ```
