@@ -3,7 +3,7 @@ const database = require('../database')
 const { prop } = require('ramda')
 const { Queue } = require('sqs-quooler')
 const getConfig = require('../config/queues')
-const logger = require('../helpers/logger')('WORKER')
+const { logger } = require('../helpers/escriba')
 
 const {
   endpoint,
@@ -17,24 +17,31 @@ const ReceiptsQueue = new Queue({
 })
 
 const processReceipt = (item, sqsMessage) => {
-  logger.info(`Processing new item:\n${JSON.stringify(item)}`)
+  logger.info('Processing new item', {
+    item,
+  })
 
   return database.Receipt.create(item)
     .then((receipt) => {
-      logger.info(`Inserted receipt #${receipt.id} for transaction #${receipt.transaction_id}`)
+      logger.info('Inserted receipt for transaction', {
+        receiptId: receipt.id,
+        transactionId: receipt.transaction_id,
+      })
 
       return ReceiptsQueue.remove(sqsMessage)
     })
     .then(() => logger.info('Removed entry from queue'))
     .catch((err) => {
-      logger.error(`Error inserting entry:\n${JSON.stringify(item)}`)
       const error = {
         name: err.name,
         message: err.message,
         stack: err.stack,
       }
 
-      logger.error(JSON.stringify(error))
+      logger.error('Error inserting entry', {
+        item,
+        error,
+      })
 
       return null
     })

@@ -4,15 +4,14 @@ const express = require('express')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
 const redirectHTTPMiddleware = require('../helpers/redirect-http')
-const log4js = require('log4js')
-const logger = require('../helpers/logger')('SERVER')
+const { httpLogger, logger } = require('../helpers/escriba')
 
 const app = express()
 const allRoutesExceptHealthCheck = /^\/(?!_health_check(\/|$)).*$/i
 
 app.use(allRoutesExceptHealthCheck, redirectHTTPMiddleware)
 
-app.use(log4js.connectLogger(logger, { level: 'auto' }))
+app.use(httpLogger)
 
 app.disable('x-powered-by')
 
@@ -38,7 +37,10 @@ if (process.env.NODE_ENV !== 'test') {
   database.bootstrap()
     .then(() => app.listen(process.env.PORT))
     .then(() => {
-      logger.info(`Server ready and listening on port ${process.env.PORT}`)
+      logger.info('Server ready and listening', {
+        port: process.env.PORT,
+        env: process.env.NODE_ENV,
+      })
     })
 }
 
