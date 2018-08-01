@@ -20,6 +20,12 @@ describe('API Tests', () => {
       .get('/')
       .then(response => expect(response.statusCode).toBe(404)))
 
+  test('GET `/robots.txt` should disallow any sniffers', () =>
+    request(app)
+      .get('/robots.txt')
+      .then(response => expect(response)
+        .toHaveProperty('text', 'User-Agent: *\nDisallow: /')))
+
   test('GET `/api/receipt/:id` with valid id should match `receiptData`', () =>
     request(app)
       .get('/api/receipt/abc-123')
