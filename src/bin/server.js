@@ -19,6 +19,11 @@ app.set('view engine', 'ejs')
 app.use('/static', express.static('views/pages/static'))
 
 app.get(
+  '/robots.txt',
+  (req, res) => res.status(200).send('User-Agent: *\nDisallow: /')
+)
+
+app.get(
   '/api/receipt/:receipt_id',
   receiptController.show
 )
