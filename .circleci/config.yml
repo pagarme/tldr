@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:8.9
         environment:
           NODE_ENV: "test"
-      - image: circleci/postgres:9.6.5-alpine
+      - image: circleci/postgres:10.1-alpine
         name: test-database
       - image: pagarme/yopa:tldr
         name: yopa

@@ -14,14 +14,14 @@ services:
       - DOTENV_PATH=.env
 
   database:
-    image: postgres:9.6.5-alpine
+    image: postgres:10.1-alpine
     environment:
       - POSTGRES_PASSWORD=Tldr123$$
     ports:
       - 5432
 
   test-database:
-    image: postgres:9.6.5-alpine
+    image: postgres:10.1-alpine
     environment:
       - POSTGRES_PASSWORD=Tldr123$$
     ports:
