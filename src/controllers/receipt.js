@@ -6,7 +6,6 @@ const formatDate = require('../lib/date')
 const formatPaymentMethod = require('../lib/payment-method')
 const formatCaptureMethod = require('../lib/capture-method')
 const formatCardBrand = require('../lib/card-brand')
-const pickDescriptor = require('../lib/descriptor')
 const templateVersion = require('../lib/template-version')
 const { logger } = require('../helpers/escriba')
 
