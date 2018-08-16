@@ -81,7 +81,7 @@ const render = (req, res) => {
       const receiptPaymentMethod = formatPaymentMethod(receipt.payment_method)
       const receiptCaptureMethod = formatCaptureMethod(receipt.capture_method)
       const receiptCardBrand = formatCardBrand(receipt.card_brand)
-      const receiptDescriptor = pickDescriptor(receipt)
+      const receiptDescriptor = receipt.statement_descriptor.substring(0, 18)
       const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
 
       const receiptVersion = templateVersion(receipt)
