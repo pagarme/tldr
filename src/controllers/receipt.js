@@ -45,6 +45,8 @@ const show = (req, res) => {
         receipt,
       })
 
+      receipt.statement_descriptor = `pg ${receipt.statement_descriptor}`.substring(0, 22)
+
       return responseHelper.sendData(req, res, statusCode, receipt)
     })
     .catch((err) => {
