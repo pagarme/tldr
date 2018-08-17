@@ -35,7 +35,11 @@ const show = (req, res) => {
         return null
       }
 
-      return receipt
+      const modifiedReceipt = receipt
+
+      modifiedReceipt.statement_descriptor = `pg ${receipt.statement_descriptor}`.substring(0, 22)
+
+      return modifiedReceipt
     })
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
@@ -52,6 +56,7 @@ const show = (req, res) => {
         receiptId,
         err,
       })
+      logger.error(err)
     })
 }
 
