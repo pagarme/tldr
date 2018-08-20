@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     card_holder_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     card_number_last_digits: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     card_brand: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     installments: {
       type: DataTypes.INTEGER,
