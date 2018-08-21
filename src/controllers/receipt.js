@@ -6,7 +6,6 @@ const formatDate = require('../lib/date')
 const formatPaymentMethod = require('../lib/payment-method')
 const formatCaptureMethod = require('../lib/capture-method')
 const formatCardBrand = require('../lib/card-brand')
-const pickDescriptor = require('../lib/descriptor')
 const templateVersion = require('../lib/template-version')
 const { logger } = require('../helpers/escriba')
 
@@ -36,7 +35,11 @@ const show = (req, res) => {
         return null
       }
 
-      return receipt
+      const modifiedReceipt = receipt
+
+      modifiedReceipt.statement_descriptor = `pg ${receipt.statement_descriptor}`.substring(0, 22)
+
+      return modifiedReceipt
     })
     .then((receipt) => {
       const statusCode = receipt ? 200 : 404
@@ -53,6 +56,7 @@ const show = (req, res) => {
         receiptId,
         err,
       })
+      logger.error(err)
     })
 }
 
@@ -81,7 +85,7 @@ const render = (req, res) => {
       const receiptPaymentMethod = formatPaymentMethod(receipt.payment_method)
       const receiptCaptureMethod = formatCaptureMethod(receipt.capture_method)
       const receiptCardBrand = formatCardBrand(receipt.card_brand)
-      const receiptDescriptor = pickDescriptor(receipt)
+      const receiptDescriptor = `pg ${receipt.statement_descriptor}`.substring(0, 22)
       const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
 
       const receiptVersion = templateVersion(receipt)

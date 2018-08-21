@@ -5,7 +5,6 @@ const formatDate = require('../../src/lib/date')
 const formatPaymentMethod = require('../../src/lib/payment-method')
 const formatCaptureMethod = require('../../src/lib/capture-method')
 const formatCardBrand = require('../../src/lib/card-brand')
-const pickDescriptor = require('../../src/lib/descriptor')
 const { receiptData } = require('./helper')
 
 const TEMPLATE_PATH = './views/pages/receipt-v2.ejs'
@@ -24,7 +23,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
+        receiptDescriptor: receipt.statement_descriptor.substring(0, 18),
         receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
@@ -113,7 +112,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
+        receiptDescriptor: receipt.statement_descriptor.substring(0, 18),
         receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
@@ -204,7 +203,7 @@ describe('Rendered receipt template', () => {
         receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
         receiptCardBrand: formatCardBrand(receipt.card_brand),
         receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
+        receiptDescriptor: receipt.statement_descriptor.substring(0, 18),
         receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
         receipt,
       }
