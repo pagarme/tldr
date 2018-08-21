@@ -32,6 +32,7 @@ const escribaConfig = {
     },
   },
   httpConf: {
+    logIdPath: 'headers.x-request-id',
     propsToLog: {
       request: [
         'id',

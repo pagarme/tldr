@@ -10,9 +10,10 @@ const pickDescriptor = require('../lib/descriptor')
 const templateVersion = require('../lib/template-version')
 const { logger } = require('../helpers/escriba')
 
-const getLastReceipt = (receiptId) => {
+const getLastReceipt = (receiptId, loggerId) => {
   logger.info('Retrieving receipt', {
     receiptId,
+    id: loggerId,
   })
 
   return database.Receipt.findOne({
@@ -25,12 +26,14 @@ const getLastReceipt = (receiptId) => {
 
 const show = (req, res) => {
   const receiptId = req.params.receipt_id
+  const loggerId = req.id
 
-  return getLastReceipt(receiptId)
+  return getLastReceipt(receiptId, loggerId)
     .then((receipt) => {
       if (!receipt) {
         logger.error('Receipt not found in database', {
           receiptId,
+          id: loggerId,
         })
 
         return null
@@ -44,6 +47,7 @@ const show = (req, res) => {
       logger.info('Retrieved receipt', {
         receiptId,
         receipt,
+        id: loggerId,
       })
 
       return responseHelper.sendData(req, res, statusCode, receipt)
@@ -52,18 +56,21 @@ const show = (req, res) => {
       logger.error('Error while retrieving receipt', {
         receiptId,
         err,
+        id: loggerId,
       })
     })
 }
 
 const render = (req, res) => {
   const receiptId = req.params.receipt_id
+  const loggerId = req.id
 
   return getLastReceipt(receiptId)
     .then((receipt) => {
       logger.info('Rendering receipt', {
         receiptId,
         receipt,
+        id: loggerId,
       })
 
       if (!receipt) {
@@ -105,6 +112,7 @@ const render = (req, res) => {
       logger.error('Error while rendering receipt', {
         receiptId,
         err,
+        id: loggerId,
       })
     })
 }
