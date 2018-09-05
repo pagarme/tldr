@@ -1,6 +1,6 @@
 {
   "name": "tldr",
-  "version": "0.1.0",
+  "version": "0.3.11",
   "description": "Pagar.me's receipt solution",
   "main": "index.js",
   "author": "Pagar.me Pagamentos S/A <@pagarme>",

@@ -45,6 +45,7 @@ if (process.env.NODE_ENV !== 'test') {
       logger.info('Server ready and listening', {
         port: process.env.PORT,
         env: process.env.NODE_ENV,
+        pkgVersion: process.env.npm_package_version || 'unknown',
       })
     })
 }
