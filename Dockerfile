@@ -28,6 +28,15 @@ ENV PORT 3000
 
 COPY --from=0 /tldr /tldr
 
+RUN apk --update add curl
+
 WORKDIR /tldr
+
+HEALTHCHECK \
+  --interval=5s \
+  --timeout=30s \
+  --start-period=10s \
+  --retries=3 \
+  CMD curl -f http://localhost:${PORT}/_health_check || exit 1
 
 EXPOSE ${PORT}

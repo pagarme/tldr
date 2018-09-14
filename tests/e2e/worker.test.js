@@ -39,5 +39,13 @@ describe('Worker Tests', () => {
     processReceipt({}, {})
       .then(result => expect(result).toBe(null)))
 
+  test('GET `/_health_check` should respond with status code `500`', () => {
+    ReceiptsQueue.options.endpoint = ''
+
+    return request(app)
+      .get('/_health_check')
+      .then(response => expect(response.statusCode).toBe(500))
+  })
+
   afterAll(database.sequelize.close)
 })

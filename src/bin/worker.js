@@ -7,12 +7,21 @@ const {
   ReceiptsQueue,
 } = require('../services/worker')
 const { httpLogger, logger } = require('../helpers/escriba')
+const { canFetchFromSQS } = require('../helpers/health-check')
 
 const app = express()
 
 app.use(httpLogger)
 
-app.get('/_health_check', (req, res) => res.send())
+app.get('/_health_check', async (req, res) => {
+  const isSQSWorking = await canFetchFromSQS(ReceiptsQueue)
+
+  if (isSQSWorking) {
+    return res.sendStatus(200)
+  }
+
+  return res.sendStatus(500)
+})
 
 ReceiptsQueue.on('error', (err) => {
   logger.error('Error on queue', {
