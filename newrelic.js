@@ -4,5 +4,6 @@ exports.config = {
   logging: {
     level: 'info',
   },
+  ignore_status_codes: [],
   agent_enabled: process.env.NODE_ENV === 'production',
 }
