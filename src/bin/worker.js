@@ -34,6 +34,14 @@ ReceiptsQueue.on('error', (err) => {
   })
 })
 
+process.on('unhandledRejection', (reason, p) => {
+  logger.error('Unhandled Rejection', {
+    rejectedPromise: p,
+    reason,
+  })
+  return process.exit(1)
+})
+
 database.bootstrap()
   .then(() => logger.info('Database bootstraped!'))
   .then(() => app.listen(process.env.PORT))
