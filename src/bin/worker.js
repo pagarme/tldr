@@ -42,6 +42,13 @@ process.on('unhandledRejection', (reason, p) => {
   return process.exit(1)
 })
 
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception', {
+    error,
+  })
+  return process.exit(1)
+})
+
 database.bootstrap()
   .then(() => logger.info('Database bootstraped!'))
   .then(() => app.listen(process.env.PORT))
