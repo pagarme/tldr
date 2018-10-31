@@ -22,7 +22,7 @@ h1, h4, h5 {
   height: 29px;
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url('../images/pagarme.svg');
+  background-image: url('../images/stonemais.svg');
 }
 
 @media only screen and (min-device-width : 768px) and (max-device-width: 1366px) {
