@@ -89,7 +89,7 @@ describe('API Tests', () => {
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Comprovante de Compra - Pagar.me</title>
+  <title>Comprovante de Compra - Stone Mais</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/static/images/favicon.png">
   <link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
