@@ -1,4 +1,4 @@
-const moment = require('moment-timezone')
+const moment = require('moment')
 
 const formatDate = paymentDate =>
   moment(paymentDate).tz('America/Sao_Paulo')
