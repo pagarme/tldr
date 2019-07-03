@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Comprovante de Compra - Stone Mais</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/static/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/main.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-parent">
+        <div class="header-parent-logo"></div>
+        <div class="header-parent-info">
+          <div class="header-parent-info-parent">
+            <div class="header-parent-info-parent-date"><%= receiptDate %></div>
+            <div class="header-parent-info-parent-name">Feito para <%= receipt.card_holder_name %></div>
+            <div class="header-parent-info-parent-phone"><%= receiptPhone %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-top">
+      <div class="main-top-parent">
+        <div class="main-top-parent-check"></div>
+        <div class="main-top-parent-text">Pagamento realizado</div>
+        <div class="main-top-parent-amount">
+          <div class="main-top-parent-amount-parent">
+            <div class="main-top-parent-amount-parent-amount">R$ <%= receiptAmount %></div>
+            <% if (receiptPaymentMethod === "Débito") { %>
+              <div class="main-top-parent-amount-parent-installments">no débito</div>
+            <% } else { %>
+              <div class="main-top-parent-amount-parent-installments">em <%= receipt.installments %>x</div>
+            <% } %>
+          </div>
+        </div>
+        <div class="main-top-parent-card">
+          <div class="main-top-parent-card-parent">
+            <% if (receipt.card_brand === "visa") { %>
+              <div class="main-top-parent-card-parent-brand brand-visa"></div>
+            <% } else if (receipt.card_brand === "mastercard") { %>
+              <div class="main-top-parent-card-parent-brand brand-mastercard"></div>
+            <% } else if (receipt.card_brand === "hipercard") { %>
+              <div class="main-top-parent-card-parent-brand brand-hipercard"></div>
+            <% } else if (receipt.card_brand === "elo") { %>
+              <div class="main-top-parent-card-parent-brand brand-elo"></div>
+            <% } else { %>
+              <div class="main-top-parent-card-parent-brand brand-visa"></div>
+            <% } %>
+            <div class="main-top-parent-card-parent-digits">Final <%= receipt.card_number_last_digits %></div>
+          </div>
+        </div>
+        <% if (receipt.cvm_pin) { %>
+          <div class="main-top-parent-approved">Transação autorizada mediante uso de senha pessoal.</div>
+        <% } %>
+      </div>
+    </div>
+    <div class="middle-line"></div>
+    <div class="main-bot">
+      <div class="main-bot-parent">
+        <div class="main-bot-parent-cod">
+          <div class="main-bot-parent-cod-parent">
+            <div class="main-bot-parent-cod-parent-text">Código de Identificação</div>
+            <div class="main-bot-parent-cod-parent-value"><%= receipt.receipt_id %></div>
+          </div>
+        </div>
+        <div class="main-bot-parent-register">
+          <div class="main-bot-parent-register-parent">
+            <div class="main-bot-parent-register-parent-text-one">Este pagamento será registrado</div>
+            <div class="main-bot-parent-register-parent-text-two">
+              <div class="main-bot-parent-register-parent-text-two-parent">
+                <% if (receiptPaymentMethod === "Débito") { %>
+                  <div class="main-bot-parent-register-parent-text-two-parent-text">no seu extrato como</div>
+                <% } else { %>
+                  <div class="main-bot-parent-register-parent-text-two-parent-text">na fatura do seu cartão como</div>
+                <% } %>
+                <div class="main-bot-parent-register-parent-text-two-parent-company"><%= receiptDescriptor %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footer-parent">
+        <div class="footer-parent-text">Dúvidas?</div>
+        <a href="mailto:stonemais@stone.com.br" class="footer-parent-link">
+          <div class="footer-parent-link">stonemais@stone.com.br</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

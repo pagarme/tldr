@@ -90,11 +90,15 @@ const render = (req, res) => {
       const receiptCardBrand = formatCardBrand(receipt.card_brand)
       const receiptDescriptor = pickDescriptor(receipt)
       const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
+      const receiptType = receipt.type.toLowerCase()
 
-      const receiptVersion = templateVersion(receipt)
+      const fileName = receiptType === 'stone_mais'
+        ? templateVersion(receipt)
+        : 'receipt'
+      const filePath = `pages/${receiptType}/${fileName}`
 
       return res.render(
-        `pages/${receiptVersion}`,
+        filePath,
         {
           receipt,
           receiptAmount,
