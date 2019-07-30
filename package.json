@@ -26,6 +26,7 @@
     "test": "jest --verbose",
     "coverage": "codecov",
     "start": "node src/bin/server.js",
+    "dev": "nodemon src/bin/server.js",
     "start-worker": "node src/bin/worker.js"
   },
   "devDependencies": {
@@ -34,6 +35,7 @@
     "eslint-config-pagarme-base": "2.0.0",
     "eslint-plugin-import": "2.9.0",
     "jest": "22.4.2",
+    "nodemon": "1.19.1",
     "supertest": "3.0.0"
   },
   "dependencies": {
