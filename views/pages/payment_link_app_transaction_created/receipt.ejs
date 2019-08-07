@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Comprovante de Compra - Link.me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/images/payment_link_app_transaction_created/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/payment_link_app_transaction_created/main.css" />
+
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="logo"
+        src="/static/images/payment_link_app_transaction_created/logo.png"
+        alt="Link me"
+      />
+
+      <p class="title">
+        Comprovante de compra realizada em
+      </p>
+      <p class="company_name">
+        <%= receipt.seller_name %>
+      </p>
+
+      <div class="content">
+        <p>Data: <strong class="bold"><%= receiptDate %></strong></p>
+        <% if (receiptPaymentMethod === "Boleto") { %>
+        <p>Meio de pagamento: <strong class="bold">Boleto</strong></p>
+        <% } %>
+
+        <% if (receiptPaymentMethod !== "Boleto") { %>
+          <p>Bandeira:
+            <strong class="bold">
+              <%= receiptCardBrand %> <%= receiptPaymentMethod %>
+            </strong>
+            <img
+              src="https://assets.pagar.me/email_templates/images/brands/<%= receiptLowerCardBrand %>.png"
+              style="vertical-align:middle;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"
+              alt="<%= receiptLowerCardBrand %>"
+              title="<%= receiptLowerCardBrand %>"
+              width="34"
+              height="24"
+            />
+          </p>
+          <p>Últimos dígitos: <strong class="bold"><%= receipt.card_number_last_digits %></strong></p>
+        <% } %>
+        <p>ID da transação: <strong class="bold"><%= receipt.transaction_id %></strong></p>
+        <p>AUT: <strong class="bold"><%= receipt.authorization_code %></strong></p>
+
+        <p class="price">
+          Total: <strong class="bold">
+            R$ <span class="price_amount"><%= receiptAmount %></span>
+          </strong>
+        </p>
+        <% if (receiptPaymentMethod === "Débito") { %>
+          <p>no débito</p>
+        <% } else if (receiptPaymentMethod === "Crédito") { %>
+          <p>em <strong class="bold"><%= receipt.installments %>x</strong></p>
+        <% } %>
+
+        <% if (receiptPaymentMethod !== "Boleto") { %>
+          <p class="invoice_card_message">
+            Este pagamento será registrado na fatura do seu
+            cartão como pg <%= receipt.seller_name %>
+          </p>
+        <% } %>
+      </div>
+
+      <p class="footer_message">Dúvidas?
+        <a href="mailto:relacionamento@pagar.me">
+          relacionamento@pagar.me
+        </a>
+      </p>
+      <button class="button" onclick="printPage()">
+        Imprimir
+      </button>
+    </div>
+  </body>
+</html>
+
