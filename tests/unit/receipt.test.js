@@ -96,6 +96,12 @@ describe('Rendered receipt template', () => {
     test('should have line \'Transação autorizada mediante uso de senha pessoal', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('Transação autorizada mediante uso de senha pessoal'))
     })
+    test('should have \'AID\' \'02199520\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('02199520'))
+    })
+    test('should have \'Aplicação\' \'Cirrus\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('Cirrus'))
+    })
   })
 
   describe('with a debit card', () => {
@@ -274,6 +280,48 @@ describe('Rendered receipt template', () => {
 
     test('should not have line \'Transação autorizada mediante uso de senha pessoal', () => {
       expect(renderedTemplate).not.toBe(expect.stringContaining('Transação autorizada mediante uso de senha pessoal'))
+    })
+  })
+  describe('without aid and application_label', () => {
+    let renderedTemplate
+
+    beforeAll(async () => {
+      const receipt = Object.assign({}, receiptData)
+
+      delete receipt.aid
+      delete receipt.application_label
+
+      const data = {
+        receiptAmount: formatMoney(receipt.amount),
+        receiptPhone: formatPhone(receipt.phone_number),
+        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
+        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
+        receiptCardBrand: formatCardBrand(receipt.card_brand),
+        receiptDate: formatDate(receipt.payment_date),
+        receiptDescriptor: pickDescriptor(receipt),
+        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
+        receipt,
+      }
+
+      return ejs.renderFile(
+        TEMPLATE_PATH,
+        data,
+        {
+          rmWhitespace: true,
+        },
+        (err, str) => {
+          if (err) {
+            throw err
+          }
+          renderedTemplate = str
+        }
+      )
+    })
+    test('should not have AID', () => {
+      expect(renderedTemplate).not.toBe(expect.stringContaining('02199520'))
+    })
+    test('should not have Aplicação', () => {
+      expect(renderedTemplate).not.toBe(expect.stringContaining('Cirrus'))
     })
   })
 })
