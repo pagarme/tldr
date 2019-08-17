@@ -117,6 +117,9 @@ a {
 .brand-elo {
   background-image: url('../images/brands/elo.svg');
 }
+.brand-amex {
+  background-image: url('../images/brands/amex.svg');
+}
 .main-top-parent-card-parent-digits {
   order: 2
 }
@@ -270,6 +273,10 @@ a {
     width: 16.79px;
     height: 16.79px;
   }
+  .brand-amex {
+    width: 16.79px;
+    height: 16.79px;
+  }
 
   /** MARGINS **/
   .header {
@@ -369,6 +376,10 @@ a {
     height: 15.89px;
   }
   .brand-elo {
+    width: 34.2px;
+    height: 34.2px;
+  }
+  .brand-amex {
     width: 34.2px;
     height: 34.2px;
   }
