@@ -8,7 +8,8 @@ const formatCardBrand = require('../../src/lib/card-brand')
 const pickDescriptor = require('../../src/lib/descriptor')
 const { receiptData } = require('./helper')
 
-const TEMPLATE_PATH = './views/pages/receipt-v2.ejs'
+const TEMPLATE_PATH_STONE_MAIS = './views/pages/stone_mais/receipt-v2.ejs'
+const TEMPLATE_PATH_LINK_ME = './views/pages/payment_link_app_transaction_created/receipt.ejs'
 
 describe('Rendered receipt template', () => {
   describe('with a credit card', () => {
@@ -30,7 +31,7 @@ describe('Rendered receipt template', () => {
       }
 
       return ejs.renderFile(
-        TEMPLATE_PATH,
+        TEMPLATE_PATH_STONE_MAIS,
         data,
         {
           rmWhitespace: true,
@@ -125,7 +126,7 @@ describe('Rendered receipt template', () => {
       }
 
       return ejs.renderFile(
-        TEMPLATE_PATH,
+        TEMPLATE_PATH_STONE_MAIS,
         data,
         {
           rmWhitespace: true,
@@ -196,6 +197,72 @@ describe('Rendered receipt template', () => {
     })
   })
 
+  describe('with a boleto', () => {
+    let renderedTemplate
+
+    beforeAll(async () => {
+      const receipt = Object.assign({}, receiptData)
+      receipt.payment_method = 'boleto'
+
+      const data = {
+        receiptAmount: formatMoney(receipt.amount),
+        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
+        receiptDate: formatDate(receipt.payment_date),
+        receipt,
+      }
+
+      return ejs.renderFile(
+        TEMPLATE_PATH_LINK_ME,
+        data,
+        {
+          rmWhitespace: true,
+        },
+        (err, str) => {
+          if (err) {
+            throw err
+          }
+          renderedTemplate = str
+        }
+      )
+    })
+
+    test('should have seller name \'Loja 1 2 3\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('Loja 1 2 3'))
+    })
+
+    test('should have payment date \'2018-03-02 10:12:25\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('02/03/2018 - 07:12'))
+    })
+
+    test('should have amount \'9,87\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('9,87'))
+    })
+
+    test('should have \'ID da transação\' \'12345\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('12345'))
+    })
+
+    test('should have \'Meio de pagamento\' \'Boleto\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('Boleto'))
+    })
+
+    test('should have \'AUT\' \'4DDP1X\'', () => {
+      expect(renderedTemplate).toEqual(expect.stringContaining('4DDP1X'))
+    })
+
+    test('should not have \'Bandeira\'', () => {
+      expect(renderedTemplate).not.toEqual(expect.stringContaining('Bandeira'))
+    })
+
+    test('should not have \'Últimos dígitos\'', () => {
+      expect(renderedTemplate).not.toEqual(expect.stringContaining('Últimos digitos'))
+    })
+
+    test('should not have \'Este pagamento será registrado na fatura do seu cartão como pg\'', () => {
+      expect(renderedTemplate).not.toEqual(expect.stringContaining('Este pagamento será registrado na fatura do seu cartão como pg'))
+    })
+  })
+
   describe('without cvm pin', () => {
     let renderedTemplate
 
@@ -216,7 +283,7 @@ describe('Rendered receipt template', () => {
       }
 
       return ejs.renderFile(
-        TEMPLATE_PATH,
+        TEMPLATE_PATH_STONE_MAIS,
         data,
         {
           rmWhitespace: true,
@@ -304,7 +371,7 @@ describe('Rendered receipt template', () => {
       }
 
       return ejs.renderFile(
-        TEMPLATE_PATH,
+        TEMPLATE_PATH_STONE_MAIS,
         data,
         {
           rmWhitespace: true,

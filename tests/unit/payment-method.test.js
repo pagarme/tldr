@@ -9,6 +9,10 @@ describe('Payment Method Lib', () => {
     expect(formatPaymentMethod('debit_card')).toBe('Débito')
   })
 
+  test('formatPaymentMethod should return \'Boleto\' when payment_method is \'boleto\'', () => {
+    expect(formatPaymentMethod('boleto')).toBe('Boleto')
+  })
+
   test('formatPaymentMethod should return \'Desconhecido\' when payment_method is invalid', () => {
     expect(formatPaymentMethod('unknown')).toBe('Desconhecido')
   })

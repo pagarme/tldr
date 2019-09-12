@@ -95,6 +95,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    template_type: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'stone_mais',
+    },
   }, {
     underscored: true,
     defaultScope: {

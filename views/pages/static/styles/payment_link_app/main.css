@@ -1,0 +1,161 @@
+* {
+  box-sizing: border-box;
+  font-family: Rubik;
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  body {
+    padding-bottom: 30px;
+    padding-top: 30px;
+  }
+
+  .button {
+    display: none;
+  }
+
+  .content:before {
+    top: 0;
+  }
+
+  .content:after {
+    bottom: 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  body {
+    padding-bottom: 40px;
+    padding-top: 40px;
+  }
+
+  .container {
+    max-width: 370px;
+    margin: 0 auto;
+  }
+
+  .content {
+    border-left: solid 1px #d8d9d9;
+    border-right: solid 1px #d8d9d9;
+  }
+
+  .content:before {
+    top: -7px;
+  }
+
+  .content:after {
+    bottom: -7px;
+  }
+}
+
+.logo {
+  display: block;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  text-align: center;
+  color: #4d4f62;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.company_name {
+  font-size: 18px;
+  font-weight: 500;
+  color: #4d4f62;
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.content {
+  background-color: #f5f5f5;
+  margin-top: 40px;
+  padding: 30px 45px 30px 20px;
+  position: relative;
+}
+
+.content:before {
+  content: "";
+  background-image: url('/static/images/payment_link_app_transaction_created/paper.png');
+  background-repeat: repeat-x;
+  height: 9px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+.content:after {
+  content: "";
+  background-image: url('/static/images/payment_link_app_transaction_created/paper_inverted.png');
+  background-repeat: repeat-x;
+  height: 9px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
+.bold {
+  font-weight: 500;
+}
+
+.price {
+  margin-top: 32px;
+}
+
+.price_amount {
+  color: #7052c8;
+  font-size: 24px;
+}
+
+.invoice_card_message {
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+}
+
+.footer_message {
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 2.08;
+  letter-spacing: normal;
+  margin-bottom: 40px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.button {
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: solid 1px #8cba41;
+  color: #8cba41;
+  cursor: pointer;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  width: 100%;
+}
+
+.button:visited,
+.button:focus,
+.button:hover,
+.button:active {
+  background-color: #8cba41;
+  color: #ffffff;
+}
