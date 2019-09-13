@@ -48,6 +48,7 @@
     "log4js": "3.0.6",
     "moment-timezone": "0.5.14",
     "newrelic": "4.6.0",
+    "dd-trace": "0.14.0",
     "pg": "7.4.1",
     "ramda": "0.25.0",
     "sequelize": "4.33.4",
