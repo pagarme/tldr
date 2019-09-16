@@ -1,5 +1,6 @@
 require('dotenv').config({ path: process.env.DOTENV_PATH })
 require('newrelic')
+require('dd-trace').init()
 const express = require('express')
 const database = require('../database')
 const receiptController = require('../controllers/receipt')
