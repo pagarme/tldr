@@ -15,9 +15,10 @@ describe('Money Lib', () => {
   })
 
   test('formatMoney should return `\'\'` when given `NaN`', () => {
-    expect.assertions(3)
+    expect.assertions(4)
     expect(formatMoney('invalid')).toBe('')
     expect(formatMoney('123abc')).toBe('')
     expect(formatMoney('')).toBe('')
+    expect(formatMoney()).toBe('')
   })
 })

@@ -12,4 +12,8 @@ describe('Card Brand Lib', () => {
   test('formatCardBrand should return \'Visa\' when card_brand is \'VISA\'', () => {
     expect(formatCardBrand('visa')).toBe('Visa')
   })
+
+  test('formatCardBrand should return \'\' when card_brand is undefined', () => {
+    expect(formatCardBrand()).toBe('')
+  })
 })

@@ -6,6 +6,14 @@ describe('Date Lib', () => {
   })
 
   test('formatDate should return UNIX epoch `-10800` when given an invalid date', () => {
-    expect(formatDate(0)).toBe('31/12/1969 - 21:00')
+    expect(formatDate(0)).toBe('')
+  })
+
+  test('formatDate should return \'\' when given an invalid date', () => {
+    expect.assertions(4)
+    expect(formatDate(new Error('Oooops!'))).toBe('')
+    expect(formatDate()).toBe('')
+    expect(formatDate('')).toBe('')
+    expect(formatDate('abcd')).toBe('')
   })
 })

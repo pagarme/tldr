@@ -1,3 +1,5 @@
+const { removeNaN } = require('../../lib/formatters')
+
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {
     transaction_id: {
@@ -6,6 +8,17 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: 1,
       },
+    },
+    refund_amount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        min: 1,
+      },
+    },
+    refund_date: {
+      allowNull: true,
+      type: DataTypes.DATE,
     },
     receipt_id: {
       type: DataTypes.STRING,
@@ -42,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    card_number_first_digits: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     card_number_last_digits: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -53,6 +70,44 @@ module.exports = (sequelize, DataTypes) => {
     installments: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
+    },
+    buyer_name: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_bank_code: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_account_type: {
+      allowNull: true,
+      type: DataTypes.ENUM,
+      values: [
+        'conta_corrente',
+        'conta_poupanca',
+        'conta_corrente_conjunta',
+        'conta_poupanca_conjunta',
+      ],
+    },
+    buyer_bank_agency: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_bank_agency_vd: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_bank_account_number: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_bank_account_number_vd: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    buyer_document_number: {
+      allowNull: true,
+      type: DataTypes.STRING,
     },
     phone_number: {
       type: DataTypes.STRING,
@@ -101,6 +156,22 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'stone_mais',
     },
   }, {
+    hooks: {
+      beforeCreate: (receipt) => {
+        const columnsToRemoveNaN = [
+          'buyer_bank_agency',
+          'buyer_bank_account_number',
+          'buyer_document_number',
+        ]
+
+        columnsToRemoveNaN.map((columnName) => {
+          // eslint-disable-next-line no-param-reassign
+          receipt[columnName] = removeNaN(columnName)
+
+          return null
+        })
+      },
+    },
     underscored: true,
     defaultScope: {
       attributes: {

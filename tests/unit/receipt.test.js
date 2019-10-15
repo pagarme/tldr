@@ -1,4 +1,5 @@
 const ejs = require('ejs')
+const { merge } = require('ramda')
 const formatMoney = require('../../src/lib/money')
 const formatPhone = require('../../src/lib/phone')
 const formatDate = require('../../src/lib/date')
@@ -6,6 +7,7 @@ const formatPaymentMethod = require('../../src/lib/payment-method')
 const formatCaptureMethod = require('../../src/lib/capture-method')
 const formatCardBrand = require('../../src/lib/card-brand')
 const pickDescriptor = require('../../src/lib/descriptor')
+const { formatReceipt } = require('../../src/lib/formatters')
 const { receiptData } = require('./helper')
 
 const TEMPLATE_PATH_STONE_MAIS = './views/pages/stone_mais/receipt-v2.ejs'
@@ -18,17 +20,7 @@ describe('Rendered receipt template', () => {
     beforeAll(async () => {
       const receipt = Object.assign({}, receiptData)
 
-      const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
-      }
+      const data = formatReceipt(receipt)
 
       return ejs.renderFile(
         TEMPLATE_PATH_STONE_MAIS,
@@ -50,7 +42,7 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('Loja 1 2 3'))
     })
 
-    test('should have payment date \'2018-03-02 10:12:25\'', () => {
+    test('should have payment date \'02/03/2018 - 07:12\'', () => {
       expect(renderedTemplate).toEqual(expect.stringContaining('02/03/2018 - 07:12'))
     })
 
@@ -109,25 +101,27 @@ describe('Rendered receipt template', () => {
     let renderedTemplate
 
     beforeAll(async () => {
-      const receipt = Object.assign({}, receiptData)
-
-      receipt.payment_method = 'debit_card'
-
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        amount: formatMoney(receiptData.amount),
+        phone_number: formatPhone(receiptData.phone_number),
+        formated_payment_method: formatPaymentMethod('debit_card'),
+        payment_method: 'debit_card',
+        capture_method: formatCaptureMethod(receiptData.capture_method),
+        card_brand: receiptData.card_brand,
+        capitalized_card_brand: formatCardBrand(receiptData.card_brand),
+        lowered_card_brand: receiptData.card_brand.toLowerCase(),
+        payment_date: formatDate(receiptData.payment_date),
+        descriptor: pickDescriptor(receiptData),
+      }
+
+      const receipt = {
+        ...data,
+        receipt: merge(receiptData, data),
       }
 
       return ejs.renderFile(
         TEMPLATE_PATH_STONE_MAIS,
-        data,
+        receipt,
         {
           rmWhitespace: true,
         },
@@ -201,19 +195,21 @@ describe('Rendered receipt template', () => {
     let renderedTemplate
 
     beforeAll(async () => {
-      const receipt = Object.assign({}, receiptData)
-      receipt.payment_method = 'boleto'
-
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptDate: formatDate(receipt.payment_date),
-        receipt,
+        amount: formatMoney(receiptData.amount),
+        formated_payment_method: formatPaymentMethod('boleto'),
+        payment_method: 'boleto',
+        payment_date: formatDate(receiptData.payment_date),
+      }
+
+      const receipt = {
+        ...data,
+        receipt: merge(receiptData, data),
       }
 
       return ejs.renderFile(
         TEMPLATE_PATH_LINK_ME,
-        data,
+        receipt,
         {
           rmWhitespace: true,
         },
@@ -267,24 +263,26 @@ describe('Rendered receipt template', () => {
     let renderedTemplate
 
     beforeAll(async () => {
-      const receipt = Object.assign({}, receiptData)
-      receipt.cvm_pin = false
-
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        amount: formatMoney(receiptData.amount),
+        phone_number: formatPhone(receiptData.phone_number),
+        formated_payment_method: formatPaymentMethod(receiptData.payment_method),
+        payment_method: receiptData.payment_method,
+        capture_method: formatCaptureMethod(receiptData.capture_method),
+        capitalized_card_brand: formatCardBrand(receiptData.card_brand),
+        payment_date: formatDate(receiptData.payment_date),
+        descriptor: pickDescriptor(receiptData),
+        lowered_card_brand: receiptData.card_brand.toLowerCase(),
+      }
+
+      const receipt = {
+        ...data,
+        receipt: merge(receiptData, data),
       }
 
       return ejs.renderFile(
         TEMPLATE_PATH_STONE_MAIS,
-        data,
+        receipt,
         {
           rmWhitespace: true,
         },
@@ -353,26 +351,26 @@ describe('Rendered receipt template', () => {
     let renderedTemplate
 
     beforeAll(async () => {
-      const receipt = Object.assign({}, receiptData)
-
-      delete receipt.aid
-      delete receipt.application_label
-
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        amount: formatMoney(receiptData.amount),
+        phone_number: formatPhone(receiptData.phone_number),
+        formated_payment_method: formatPaymentMethod(receiptData.payment_method),
+        payment_method: receiptData.payment_method,
+        capture_method: formatCaptureMethod(receiptData.capture_method),
+        capitalized_card_brand: formatCardBrand(receiptData.card_brand),
+        payment_date: formatDate(receiptData.payment_date),
+        descriptor: pickDescriptor(receiptData),
+        lowered_card_brand: receiptData.card_brand.toLowerCase(),
+      }
+
+      const receipt = {
+        ...data,
+        receipt: merge(receiptData, data),
       }
 
       return ejs.renderFile(
         TEMPLATE_PATH_STONE_MAIS,
-        data,
+        receipt,
         {
           rmWhitespace: true,
         },
