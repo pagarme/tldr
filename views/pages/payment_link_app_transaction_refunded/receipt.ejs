@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Comprovante de Compra - Link.me</title>
+    <title>Comprovante de Estorno - Link.me</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/static/images/payment_link_app_transaction_created/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap" rel="stylesheet">
@@ -24,19 +24,35 @@
       />
 
       <p class="title">
-        Comprovante de compra realizada em
+        Comprovante de estorno realizado em
       </p>
       <p class="company_name">
         <%= receipt.seller_name %>
       </p>
 
       <div class="content">
-        <p>Data: <strong class="bold"><%= receipt.payment_date %></strong></p>
-        <% if (receipt.formated_payment_method === "Boleto") { %>
-        <p>Meio de pagamento: <strong class="bold">Boleto</strong></p>
+        <p>ID da transação: <strong class="bold"><%= receipt.transaction_id %></strong></p>
+
+        <% if (receipt.formated_payment_method === "Crédito") { %>
+          <p>ID da autorização: <strong class="bold"><%= receipt.authorization_code %></strong></p>
         <% } %>
 
-        <% if (receipt.formated_payment_method !== "Boleto") { %>
+        <p>Valor da compra: <strong class="bold">R$ <%= receipt.amount %></strong></p>
+        <p>Data da compra: <strong class="bold"><%= receipt.payment_date %></strong></p>
+        <p>Valor do estorno: <strong class="bold">R$ <%= receipt.refund_amount %></strong></p>
+        <p>Data do estorno: <strong class="bold"><%= receipt.refund_date %></strong></p>
+
+
+
+        <br />
+
+        <% if (receipt.formated_payment_method === "Crédito") { %>
+          <p>Nome do titular: <strong class="bold"><%= receipt.card_holder_name %></strong></p>
+          <p>Cartão utilizado:
+            <strong class="bold">
+                <%= receipt.card_number_first_digits %> **** **** <%= receipt.card_number_last_digits %>
+            </strong>
+          </p>
           <p>Bandeira:
             <strong class="bold">
               <%= receipt.capitalized_card_brand %> <%= receipt.formated_payment_method %>
@@ -50,27 +66,23 @@
               height="24"
             />
           </p>
-          <p>Últimos dígitos: <strong class="bold"><%= receipt.card_number_last_digits %></strong></p>
-        <% } %>
-        <p>ID da transação: <strong class="bold"><%= receipt.transaction_id %></strong></p>
-        <p>AUT: <strong class="bold"><%= receipt.authorization_code %></strong></p>
-
-        <p class="price">
-          Total: <strong class="bold">
-            R$ <span class="price_amount"><%= receipt.amount %></span>
-          </strong>
-        </p>
-        <% if (receipt.formated_payment_method === "Débito") { %>
-          <p>no débito</p>
-        <% } else if (receipt.formated_payment_method === "Crédito") { %>
-          <p>em <strong class="bold"><%= receipt.installments %>x</strong></p>
         <% } %>
 
-        <% if (receipt.formated_payment_method !== "Boleto") { %>
-          <p class="invoice_card_message">
-            Este pagamento será registrado na fatura do seu
-            cartão como pg <%= receipt.seller_name %>
+        <% if (receipt.formated_payment_method === "Boleto") { %>
+          <p>Nome do titular: <strong class="bold"><%= receipt.buyer_name %></strong></p>
+          <p>Banco: <strong class="bold"><%= receipt.buyer_bank_code %></strong></p>
+          <p>Tipo de conta: <strong class="bold"><%= receipt.buyer_account_type %></strong></p>
+          <p>Agência:
+              <strong class="bold">
+                <%= receipt.buyer_bank_agency %>-<%= receipt.buyer_bank_agency_vd %>
+              </strong>
           </p>
+          <p>Conta:
+            <strong class="bold">
+              <%= receipt.buyer_bank_account_number %>-<%= receipt.buyer_bank_account_number_vd %>
+            </strong>
+          </p>
+          <p>CPF/CNPJ: <strong class="bold"><%= receipt.buyer_document_number %></strong></p>
         <% } %>
       </div>
 
@@ -85,4 +97,3 @@
     </div>
   </body>
 </html>
-

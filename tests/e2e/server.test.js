@@ -1,5 +1,6 @@
 const app = require('../../src/bin/server')
 const request = require('supertest')
+const { merge } = require('ramda')
 const database = require('../../src/database')
 const { receiptData } = require('./helper')
 
@@ -7,7 +8,10 @@ describe('API Tests', () => {
   beforeAll(async () => {
     await database.bootstrap()
     await database.Receipt.truncate()
-    await database.Receipt.create(receiptData)
+    await database.Receipt.create(merge(receiptData, {
+      receipt_id: 'abc-456',
+      template_type: 'payment_link_app_transaction_refunded',
+    }))
   })
 
   test('GET `/_health_check` should respond with status code `200`', () =>
@@ -28,12 +32,12 @@ describe('API Tests', () => {
 
   test('GET `/api/receipt/:id` with valid id should match `receiptData`', () =>
     request(app)
-      .get('/api/receipt/abc-123')
+      .get('/api/receipt/abc-456')
       .then((response) => {
         expect(response.body).toEqual({
           data: {
             transaction_id: 424242,
-            receipt_id: 'abc-123',
+            receipt_id: 'abc-456',
             seller_id: 'loja123',
             seller_name: 'Loja 1 2 3',
             transaction_status: 'refunded',
@@ -54,7 +58,18 @@ describe('API Tests', () => {
             application_cryptogram: '5EC8B98ABC8F9E7597647CBCB9A75400',
             soft_descriptor: 'loja123',
             statement_descriptor: 'pg* loja123',
-            template_type: 'stone_mais',
+            template_type: 'payment_link_app_transaction_refunded',
+            buyer_account_type: null,
+            buyer_bank_account_number: "",
+            buyer_bank_account_number_vd: null,
+            buyer_bank_agency: "",
+            buyer_bank_agency_vd: null,
+            buyer_bank_code: null,
+            buyer_document_number: "",
+            buyer_name: null,
+            card_number_first_digits: null,
+            refund_amount: null,
+            refund_date: null,
           },
         })
       }))
@@ -73,10 +88,8 @@ describe('API Tests', () => {
 
   test('GET `/receipt/:id` with valid id should render receipt page', () => {
     return request(app)
-      .get('/receipt/abc-123')
-      .then((response) => {
-        expect(response.statusCode).toBe(200)
-      })
+      .get('/receipt/abc-456')
+      .then((response) => expect(response.statusCode).toBe(200))
   })
 
   test('GET `/receipt/:id` with invalid id should render 404 page', () => {
