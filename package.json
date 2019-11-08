@@ -46,7 +46,7 @@
     "escriba": "2.3.0",
     "express": "4.16.2",
     "log4js": "3.0.6",
-    "moment-timezone": "0.5.14",
+    "moment": "https://github.com/pagarme/moment/archive/0.0.5.tar.gz",
     "newrelic": "4.6.0",
     "dd-trace": "0.14.0",
     "pg": "7.4.1",
