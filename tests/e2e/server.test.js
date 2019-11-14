@@ -55,6 +55,17 @@ describe('API Tests', () => {
             soft_descriptor: 'loja123',
             statement_descriptor: 'pg* loja123',
             template_type: 'stone_mais',
+            buyer_account_type: null,
+            buyer_bank_account_number: '',
+            buyer_bank_account_number_vd: null,
+            buyer_bank_agency: '',
+            buyer_bank_agency_vd: null,
+            buyer_bank_code: null,
+            buyer_document_number: '',
+            buyer_name: null,
+            card_number_first_digits: null,
+            refund_amount: null,
+            refund_date: null,
           },
         })
       }))

@@ -1,4 +1,4 @@
-const formatMoney = (n, m = '.', c = ',') => {
+const formatMoney = (n = '', m = '.', c = ',') => {
   if (!Number.isInteger(n)) {
     return ''
   }

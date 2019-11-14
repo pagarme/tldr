@@ -1,4 +1,4 @@
-const removeNaN = require('../../lib/formatters')
+const removeNaN = require('../../lib/cleaners')
 
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {

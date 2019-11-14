@@ -1,6 +1,11 @@
-const capitalize = ([first, ...rest]) => first.toUpperCase()
-  + rest.join('').toLowerCase()
+const capitalize = str => (
+  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+)
 
-const formatCardBrand = cardBrand => capitalize(cardBrand)
+const formatCardBrand = (cardBrand = '') => (
+  cardBrand
+    ? capitalize(cardBrand)
+    : ''
+)
 
 module.exports = formatCardBrand
