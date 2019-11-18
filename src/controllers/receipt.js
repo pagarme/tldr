@@ -1,6 +1,5 @@
 const axios = require('axios')
 
-const Promise = require('bluebird')
 const database = require('../database')
 const responseHelper = require('../helpers/response')
 const templateVersion = require('../lib/template-version')
@@ -58,60 +57,57 @@ const show = (req, res) => {
     })
 }
 
-const render = (req, res) => {
+const render = async (req, res) => {
   const receiptId = req.params.receipt_id
   const loggerId = req.id
 
-  return getLastReceipt(receiptId)
-    .then((receipt) => {
-      logger.info('Rendering receipt', {
-        receiptId,
-        receipt,
-        id: loggerId,
-      })
+  try {
+    const receipt = await getLastReceipt(receiptId)
+    let bankInstitutionsData = []
 
-      if (!receipt) {
-        return res.render(
-          'pages/404',
-          {
-            receiptId,
-          }
-        )
-      }
-
-      if (receipt.template_type === 'payment_link_app_transaction_refunded') {
-        return Promise.all([
-          receipt,
-          axios.get('https://api.openbank.stone.com.br/api/v1/institutions'),
-        ])
-      }
-
-      return [
-        receipt,
-      ]
+    logger.info('Rendering receipt', {
+      receiptId,
+      receipt,
+      id: loggerId,
     })
-    .then(([receipt, bankInstitutionsData = []]) => {
-      const formattedReceipt = formatReceipt(receipt, bankInstitutionsData)
-      const templateType = formattedReceipt.template_type
-      const fileName = templateType === 'stone_mais'
-        ? templateVersion(receipt)
-        : 'receipt'
-      const filePath = `pages/${templateType}/${fileName}`
 
+    if (!receipt) {
       return res.render(
-        filePath,
+        'pages/404',
         {
-          receipt: formattedReceipt,
+          receiptId,
         }
       )
+    }
+
+    if (receipt.template_type === 'payment_link_app_transaction_refunded') {
+      const stoneApiUrl = 'https://api.openbank.stone.com.br/api/v1/institutions'
+
+      bankInstitutionsData = await axios.get(stoneApiUrl)
+    }
+
+    const formattedReceipt = formatReceipt(receipt, bankInstitutionsData)
+    const templateType = formattedReceipt.template_type
+    const fileName = templateType === 'stone_mais'
+      ? templateVersion(receipt)
+      : 'receipt'
+    const filePath = `pages/${templateType}/${fileName}`
+
+    return res.render(
+      filePath,
+      {
+        receipt: formattedReceipt,
+      }
+    )
+  } catch (err) {
+    logger.error('Error while rendering receipt', {
+      receiptId,
+      err,
+      id: loggerId,
     })
-    .catch((err) => {
-      logger.error('Error while rendering receipt', {
-        receiptId,
-        err,
-        id: loggerId,
-      })
-    })
+  }
+
+  return null
 }
 
 module.exports = {
