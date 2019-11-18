@@ -1,13 +1,10 @@
+const axios = require('axios')
+
+const Promise = require('bluebird')
 const database = require('../database')
 const responseHelper = require('../helpers/response')
-const formatMoney = require('../lib/money')
-const formatPhone = require('../lib/phone')
-const formatDate = require('../lib/date')
-const formatPaymentMethod = require('../lib/payment-method')
-const formatCaptureMethod = require('../lib/capture-method')
-const formatCardBrand = require('../lib/card-brand')
-const pickDescriptor = require('../lib/descriptor')
 const templateVersion = require('../lib/template-version')
+const formatReceipt = require('../lib/formatters')
 const { logger } = require('../helpers/escriba')
 
 const getLastReceipt = (receiptId, loggerId) => {
@@ -82,33 +79,29 @@ const render = (req, res) => {
         )
       }
 
-      const receiptAmount = formatMoney(receipt.amount)
-      const receiptPhone = formatPhone(receipt.phone_number)
-      const receiptDate = formatDate(receipt.payment_date)
-      const receiptPaymentMethod = formatPaymentMethod(receipt.payment_method)
-      const receiptCaptureMethod = formatCaptureMethod(receipt.capture_method)
-      const receiptCardBrand = formatCardBrand(receipt.card_brand)
-      const receiptDescriptor = pickDescriptor(receipt)
-      const receiptLowerCardBrand = receipt.card_brand.toLowerCase()
-      const receiptTemplateType = receipt.template_type
+      if (receipt.template_type === 'payment_link_app_transaction_refunded') {
+        return Promise.all([
+          receipt,
+          axios.get('https://api.openbank.stone.com.br/api/v1/institutions'),
+        ])
+      }
 
-      const fileName = receiptTemplateType === 'stone_mais'
+      return [
+        receipt,
+      ]
+    })
+    .then(([receipt, bankInstitutionsData = []]) => {
+      const formattedReceipt = formatReceipt(receipt, bankInstitutionsData)
+      const templateType = formattedReceipt.template_type
+      const fileName = templateType === 'stone_mais'
         ? templateVersion(receipt)
         : 'receipt'
-      const filePath = `pages/${receiptTemplateType}/${fileName}`
+      const filePath = `pages/${templateType}/${fileName}`
 
       return res.render(
         filePath,
         {
-          receipt,
-          receiptAmount,
-          receiptPhone,
-          receiptDate,
-          receiptPaymentMethod,
-          receiptCaptureMethod,
-          receiptCardBrand,
-          receiptDescriptor,
-          receiptLowerCardBrand,
+          receipt: formattedReceipt,
         }
       )
     })

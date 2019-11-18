@@ -309,7 +309,7 @@
                                         <tr style="border-collapse:collapse;">
                                           <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-bottom:20px;padding-left:30px;">
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#333333;">
-                                              <%= receiptDate %>
+                                              <%= receipt.payment_date %>
                                             </p>
                                           </td>
                                         </tr>
@@ -355,7 +355,7 @@
                                                 na fatura do seu cartão como
                                               <% } %>
                                               <strong>
-                                                <%= receiptDescriptor %>
+                                                <%= receipt.descriptor %>
                                               </strong>
                                             </p>
                                           </td>
@@ -378,7 +378,7 @@
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:40px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#666666;">
                                               <span style="color:#7B00F5;">
                                                 <strong>
-                                                  R$ <%= receiptAmount %>
+                                                  R$ <%= receipt.amount %>
                                                 </strong>
                                               </span>
                                               <% if (receipt.payment_method === "debit_card") { %>
@@ -429,8 +429,8 @@
                                           <td align="left" style="padding:0;Margin:0;">
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#959DAD;">Bandeira:</p>
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#333333;">
-                                              <img src="https://assets.pagar.me/email_templates/images/brands/<%= receiptLowerCardBrand %>.png" style="vertical-align:middle;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" alt="<%= receiptLowerCardBrand %>" title="<%= receiptLowerCardBrand %>" width="34" height="24">
-                                                <%= receiptCardBrand %> <%= receiptPaymentMethod %>
+                                              <img src="https://assets.pagar.me/email_templates/images/brands/<%= receipt.lowered_card_brand %>.png" style="vertical-align:middle;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" alt="<%= receipt.lowered_card_brand %>" title="<%= receipt.lowered_card_brand %>" width="34" height="24">
+                                                <%= receipt.capitalized_card_brand %> <%= receipt.formated_payment_method %>
                                             </p>
                                           </td>
                                         </tr>
@@ -678,7 +678,7 @@
                                           <td align="left" style="padding:0;Margin:0;">
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#959DAD;">AC:</p>
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:150%;color:#333333;">
-                                              <%= receiptCaptureMethod %>
+                                              <%= receipt.capture_method %>
                                             </p>
                                           </td>
                                         </tr>

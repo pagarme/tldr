@@ -6,6 +6,7 @@ const formatPaymentMethod = require('../../src/lib/payment-method')
 const formatCaptureMethod = require('../../src/lib/capture-method')
 const formatCardBrand = require('../../src/lib/card-brand')
 const pickDescriptor = require('../../src/lib/descriptor')
+const formatReceipt = require('../../src/lib/formatters')
 const { receiptData } = require('./helper')
 
 const TEMPLATE_PATH_STONE_MAIS = './views/pages/stone_mais/receipt-v2.ejs'
@@ -17,17 +18,8 @@ describe('Rendered receipt template', () => {
 
     beforeAll(async () => {
       const receipt = Object.assign({}, receiptData)
-
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        receipt: formatReceipt(receipt),
       }
 
       return ejs.renderFile(
@@ -114,15 +106,7 @@ describe('Rendered receipt template', () => {
       receipt.payment_method = 'debit_card'
 
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        receipt: formatReceipt(receipt),
       }
 
       return ejs.renderFile(
@@ -205,10 +189,7 @@ describe('Rendered receipt template', () => {
       receipt.payment_method = 'boleto'
 
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptDate: formatDate(receipt.payment_date),
-        receipt,
+        receipt: formatReceipt(receipt)
       }
 
       return ejs.renderFile(
@@ -271,15 +252,7 @@ describe('Rendered receipt template', () => {
       receipt.cvm_pin = false
 
       const data = {
-        receiptAmount: formatMoney(receipt.amount),
-        receiptPhone: formatPhone(receipt.phone_number),
-        receiptPaymentMethod: formatPaymentMethod(receipt.payment_method),
-        receiptCaptureMethod: formatCaptureMethod(receipt.capture_method),
-        receiptCardBrand: formatCardBrand(receipt.card_brand),
-        receiptDate: formatDate(receipt.payment_date),
-        receiptDescriptor: pickDescriptor(receipt),
-        receiptLowerCardBrand: receipt.card_brand.toLowerCase(),
-        receipt,
+        receipt: formatReceipt(receipt),
       }
 
       return ejs.renderFile(
@@ -349,6 +322,7 @@ describe('Rendered receipt template', () => {
       expect(renderedTemplate).not.toBe(expect.stringContaining('Transação autorizada mediante uso de senha pessoal'))
     })
   })
+
   describe('without aid and application_label', () => {
     let renderedTemplate
 

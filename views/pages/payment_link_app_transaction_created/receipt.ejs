@@ -31,21 +31,21 @@
       </p>
 
       <div class="content">
-        <p>Data: <strong class="bold"><%= receiptDate %></strong></p>
-        <% if (receiptPaymentMethod === "Boleto") { %>
+        <p>Data: <strong class="bold"><%= receipt.payment_date %></strong></p>
+        <% if (receipt.formated_payment_method === "Boleto") { %>
         <p>Meio de pagamento: <strong class="bold">Boleto</strong></p>
         <% } %>
 
-        <% if (receiptPaymentMethod !== "Boleto") { %>
+        <% if (receipt.formated_payment_method !== "Boleto") { %>
           <p>Bandeira:
             <strong class="bold">
-              <%= receiptCardBrand %> <%= receiptPaymentMethod %>
+              <%= receipt.capitalized_card_brand %> <%= receipt.formated_payment_method %>
             </strong>
             <img
-              src="https://assets.pagar.me/email_templates/images/brands/<%= receiptLowerCardBrand %>.png"
+              src="https://assets.pagar.me/email_templates/images/brands/<%= receipt.lowered_card_brand %>.png"
               style="vertical-align:middle;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"
-              alt="<%= receiptLowerCardBrand %>"
-              title="<%= receiptLowerCardBrand %>"
+              alt="<%= receipt.lowered_card_brand %>"
+              title="<%= receipt.lowered_card_brand %>"
               width="34"
               height="24"
             />
@@ -57,16 +57,16 @@
 
         <p class="price">
           Total: <strong class="bold">
-            R$ <span class="price_amount"><%= receiptAmount %></span>
+            R$ <span class="price_amount"><%= receipt.amount %></span>
           </strong>
         </p>
-        <% if (receiptPaymentMethod === "Débito") { %>
+        <% if (receipt.formated_payment_method === "Débito") { %>
           <p>no débito</p>
-        <% } else if (receiptPaymentMethod === "Crédito") { %>
+        <% } else if (receipt.formated_payment_method === "Crédito") { %>
           <p>em <strong class="bold"><%= receipt.installments %>x</strong></p>
         <% } %>
 
-        <% if (receiptPaymentMethod !== "Boleto") { %>
+        <% if (receipt.formated_payment_method !== "Boleto") { %>
           <p class="invoice_card_message">
             Este pagamento será registrado na fatura do seu
             cartão como pg <%= receipt.seller_name %>

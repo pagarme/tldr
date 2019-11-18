@@ -50,9 +50,7 @@ const formatReceipt = (receipt = {}, bankInstitutions) => {
     buyer_document_number: buyerDocumentNumber,
   })
 
-  return {
-    receipt: formattedReceipt,
-  }
+  return { ...formattedReceipt }
 }
 
 module.exports = formatReceipt

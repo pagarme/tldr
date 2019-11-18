@@ -1,3 +1,4 @@
+const { merge } = require('ramda')
 const app = require('../../src/bin/server')
 const request = require('supertest')
 const database = require('../../src/database')
@@ -7,7 +8,9 @@ describe('API Tests', () => {
   beforeAll(async () => {
     await database.bootstrap()
     await database.Receipt.truncate()
-    await database.Receipt.create(receiptData)
+    await database.Receipt.create(merge(receiptData, {
+      template_type: 'payment_link_app_transaction_refunded',
+    }))
   })
 
   test('GET `/_health_check` should respond with status code `200`', () =>
@@ -54,7 +57,7 @@ describe('API Tests', () => {
             application_cryptogram: '5EC8B98ABC8F9E7597647CBCB9A75400',
             soft_descriptor: 'loja123',
             statement_descriptor: 'pg* loja123',
-            template_type: 'stone_mais',
+            template_type: 'payment_link_app_transaction_refunded',
             buyer_account_type: null,
             buyer_bank_account_number: '',
             buyer_bank_account_number_vd: null,
