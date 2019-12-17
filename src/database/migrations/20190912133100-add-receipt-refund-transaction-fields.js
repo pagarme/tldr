@@ -23,7 +23,7 @@ module.exports = {
         allowNull: true,
       }),
       queryInterface.addColumn(tableName, 'buyer_bank_code', {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
       }),
       queryInterface.addColumn(tableName, 'buyer_account_type', {
