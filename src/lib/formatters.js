@@ -22,7 +22,7 @@ const formatReceipt = (receipt = {}, bankInstitutions) => {
   const refundDate = formatDate(pathOr('', ['refund_date'], receiptValues))
   const paymentDate = formatDate(pathOr('', ['payment_date'], receiptValues))
   const paymentMethod = pathOr('', ['payment_method'], receiptValues)
-  const formatedPaymentMethod = formatPaymentMethod(pathOr('', ['payment_method'], receiptValues))
+  const formatedPaymentMethod = formatPaymentMethod(paymentMethod)
   const phoneNumber = formatPhone(pathOr('', ['phone_number'], receiptValues))
   const buyerAccountType = formatAccountType(pathOr('', ['buyer_account_type'], receiptValues))
   const buyerBankCode = pathOr('', ['buyer_bank_code'], receiptValues)
