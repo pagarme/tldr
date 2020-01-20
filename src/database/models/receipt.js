@@ -165,8 +165,9 @@ module.exports = (sequelize, DataTypes) => {
         ]
 
         columnsToRemoveNaN.map((columnName) => {
+          const columnValue = receipt[columnName]
           // eslint-disable-next-line no-param-reassign
-          receipt[columnName] = removeNaN(columnName)
+          receipt[columnName] = removeNaN(columnValue)
 
           return null
         })
