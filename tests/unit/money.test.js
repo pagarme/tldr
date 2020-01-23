@@ -2,7 +2,6 @@ const formatMoney = require('../../src/lib/money')
 
 describe('Money Lib', () => {
   test('formatMoney should return a string when given a correct input', () => {
-    expect.assertions(9)
     expect(formatMoney(1)).toBe('0,01')
     expect(formatMoney(12)).toBe('0,12')
     expect(formatMoney(123)).toBe('1,23')
@@ -15,9 +14,9 @@ describe('Money Lib', () => {
   })
 
   test('formatMoney should return `\'\'` when given `NaN`', () => {
-    expect.assertions(3)
     expect(formatMoney('invalid')).toBe('')
     expect(formatMoney('123abc')).toBe('')
     expect(formatMoney('')).toBe('')
+    expect(formatMoney()).toBe('')
   })
 })

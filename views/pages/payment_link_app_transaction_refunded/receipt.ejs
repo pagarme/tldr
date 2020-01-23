@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Comprovante de Estorno - Link.me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/images/payment_link_app/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/payment_link_app_transaction_created/main.css" />
+
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="logo"
+        src="/static/images/payment_link_app/logo.png"
+        alt="Link me"
+      />
+
+      <p class="title">
+        Comprovante de estorno realizado em
+      </p>
+      <p class="company_name">
+        <%= receipt.seller_name %>
+      </p>
+
+      <div class="content">
+        <p>ID da transação: <strong class="bold"><%= receipt.transaction_id %></strong></p>
+
+        <% if (receipt.formated_payment_method === "Crédito") { %>
+          <p>ID da autorização: <strong class="bold"><%= receipt.authorization_code %></strong></p>
+        <% } %>
+
+        <p>Valor da compra: <strong class="bold">R$ <%= receipt.amount %></strong></p>
+        <p>Data da compra: <strong class="bold"><%= receipt.payment_date %></strong></p>
+        <p>Valor do estorno: <strong class="bold">R$ <%= receipt.refund_amount %></strong></p>
+        <p>Data do estorno: <strong class="bold"><%= receipt.refund_date %></strong></p>
+
+        <br />
+
+        <% if (receipt.formated_payment_method === "Crédito") { %>
+          <p>Nome do titular: <strong class="bold"><%= receipt.card_holder_name %></strong></p>
+          <p>Cartão utilizado:
+            <strong class="bold">
+                <%= receipt.card_number_first_digits %> **** **** <%= receipt.card_number_last_digits %>
+            </strong>
+          </p>
+          <p>Bandeira:
+            <strong class="bold">
+              <%= receipt.capitalized_card_brand %> <%= receipt.formated_payment_method %>
+            </strong>
+            <img
+              src="https://assets.pagar.me/email_templates/images/brands/<%= receipt.lowered_card_brand %>.png"
+              style="vertical-align:middle;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;"
+              alt="<%= receipt.lowered_card_brand %>"
+              title="<%= receipt.lowered_card_brand %>"
+              width="34"
+              height="24"
+            />
+          </p>
+        <% } %>
+
+        <% if (receipt.formated_payment_method === "Boleto") { %>
+          <p>Nome do titular: <strong class="bold"><%= receipt.buyer_name %></strong></p>
+          <p>Banco: <strong class="bold"><%= receipt.buyer_bank_code %></strong></p>
+          <p>Tipo de conta: <strong class="bold"><%= receipt.buyer_account_type %></strong></p>
+          <p>Agência:
+              <strong class="bold">
+                <%= receipt.buyer_bank_agency %>-<%= receipt.buyer_bank_agency_vd %>
+              </strong>
+          </p>
+          <p>Conta:
+            <strong class="bold">
+              <%= receipt.buyer_bank_account_number %>-<%= receipt.buyer_bank_account_number_vd %>
+            </strong>
+          </p>
+          <p>CPF/CNPJ: <strong class="bold"><%= receipt.buyer_document_number %></strong></p>
+        <% } %>
+      </div>
+
+      <p class="footer_message">Dúvidas?
+        <a href="mailto:relacionamento@pagar.me">
+          relacionamento@pagar.me
+        </a>
+      </p>
+      <button class="button" onclick="printPage()">
+        Imprimir
+      </button>
+    </div>
+  </body>
+</html>
