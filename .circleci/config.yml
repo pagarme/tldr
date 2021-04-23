@@ -1,4 +1,25 @@
-version: 2
+version: 2.1
+
+parameters:
+  workingdir:
+    type: string
+    default: "~/tldr"
+  machine_image:
+    type: string
+    default: "ubuntu-2004:202101-01"
+
+_run:
+  pull_sonar_check_quality_gate_image: &pull_sonar_check_quality_gate_image
+    name: Pull Docker check-sonar-quality-gate image
+    command: |
+      echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+      docker pull pagarme/check-sonar-quality-gate
+  pull_sonar: &pull_sonar
+    name: Pull Docker sonar analisys
+    command: |
+      echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+      docker pull pagarme/sonar-scanner
+
 jobs:
   build:
     docker:
@@ -9,7 +30,7 @@ jobs:
         name: test-database
       - image: pagarme/yopa:tldr
         name: yopa
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     steps:
       - checkout
       - restore_cache:
@@ -19,15 +40,33 @@ jobs:
       - run: yarn install
       - run: yarn lint
       - run: node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
-      - run: yarn test && yarn codecov
+      - run: yarn test
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
+  sonar-analisys:
+      machine: 
+        image: << pipeline.parameters.machine_image >>
+      working_directory: << pipeline.parameters.workingdir >>
+      steps:
+        - run: *pull_sonar
+        - run:
+            name: Run Sonar
+            command: make sonar BRANCH=$CIRCLE_BRANCH
+  sonar-quality-gate:
+    machine: 
+      image: << pipeline.parameters.machine_image >>
+    working_directory: << pipeline.parameters.workingdir >>
+    steps:
+      - run: *pull_sonar_check_quality_gate_image
+      - run:
+          name: Run Sonar Quality Gate
+          command: make sonar-check-quality-gate
   build_image:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - checkout
       - run:
@@ -45,15 +84,15 @@ jobs:
       - persist_to_workspace:
           root: images
           paths:
-             -  build-w.tar
-             -  build-s.tar
+              -  build-w.tar
+              -  build-s.tar
   push_staging:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - attach_workspace:
-         at: ~/tldr/images
+          at: ~/tldr/images
       - run:
           name: prepare Deploy to fargate
           command: |
@@ -77,12 +116,12 @@ jobs:
             docker tag build-w:latest ${STG_IMAGE_W}:latest
             docker push ${STG_IMAGE_W}:latest
   push_production:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - attach_workspace:
-         at: ~/tldr/images
+          at: ~/tldr/images
       - run:
           name: prepare Deploy to fargate
           command: |
@@ -106,9 +145,9 @@ jobs:
             docker tag build-w:latest ${PRD_IMAGE_W}:latest
             docker push ${PRD_IMAGE_W}:latest
   deploy_sandbox_stg_s:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -130,9 +169,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_SANDBOX_S -i $STG_IMAGE_S --timeout $TIMEOUT
   deploy_sandbox_stg_w:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -154,9 +193,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy  --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_SANDBOX_W -i $STG_IMAGE_W --timeout $TIMEOUT
   deploy_sandbox_prd_s:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -178,9 +217,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy  --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_SANDBOX_S -i $PRD_IMAGE_S --timeout $TIMEOUT
   deploy_sandbox_prd_w:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -202,9 +241,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_SANDBOX_W -i $PRD_IMAGE_W --timeout $TIMEOUT
   deploy_live_stg_s:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -226,9 +265,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_LIVE_S -i $STG_IMAGE_S --timeout $TIMEOUT
   deploy_live_stg_w:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -250,9 +289,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $STG_CLUSTER -r $REGION -n $TASK_LIVE_W -i $STG_IMAGE_W --timeout $TIMEOUT
   deploy_live_prd_s:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -274,9 +313,9 @@ jobs:
             export PATH=$HOME/.local/bin:$PATH # put aws in the path
             ~/.local/bin/ecs-deploy --max-definitions 3 --enable-rollback -c $PRD_CLUSTER -r $REGION -n $TASK_LIVE_S -i $PRD_IMAGE_S --timeout $TIMEOUT
   deploy_live_prd_w:
-    working_directory: ~/tldr
+    working_directory: << pipeline.parameters.workingdir >>
     machine:
-        enabled: true
+        image: << pipeline.parameters.machine_image >>
     steps:
       - run:
           name: Prepare to deploy
@@ -302,117 +341,151 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-    - build:
-        filters:
-          tags:
-            only: /^v.*/
-    - build_image:
-        requires:
-          - build
-        filters:
-          tags:
-            only: /^v.*/
-    - push_staging:
-        requires:
-          - build_image
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_sandbox_stg_s:
-        requires:
-        - push_staging
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_sandbox_stg_w:
-        requires:
+      - build:
+          pre-steps:
+            - attach_workspace:
+                at: << pipeline.parameters.workingdir >>
+          post-steps:
+            - persist_to_workspace:
+                root: << pipeline.parameters.workingdir >>
+                paths:
+                  - .
+          filters:
+            tags:
+                only: /^v.*/
+      - sonar-analisys:
+          context: dockerhub
+          pre-steps:
+            - attach_workspace:
+                at: << pipeline.parameters.workingdir >>
+          post-steps:
+            - persist_to_workspace:
+                root: << pipeline.parameters.workingdir >>
+                paths:
+                  - .
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+              - build
+      - sonar-quality-gate:
+          context: dockerhub
+          pre-steps:
+            - attach_workspace:
+                at: << pipeline.parameters.workingdir >>
+          filters:
+            branches:
+              ignore: 
+                - master
+          requires:
+            - sonar-analisys
+      - build_image:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+      - push_staging:
+          requires:
+            - build_image
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+      - deploy_sandbox_stg_s:
+          requires:
           - push_staging
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_live_stg_s:
-        requires:
-          - push_staging
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - deploy_live_stg_w:
-        requires:
-          - push_staging
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
-    - hold:
-        type: approval
-        requires:
-          - deploy_live_stg_s
-          - deploy_live_stg_w
-          - deploy_sandbox_stg_s
-          - deploy_sandbox_stg_w
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - push_production:
-        requires:
-          - hold
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - deploy_sandbox_prd_s:
-        requires:
-        - push_production
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - deploy_sandbox_prd_w:
-        requires:
-        - push_production
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - hold_sandbox:
-        type: approval
-        requires:
-          - deploy_sandbox_prd_s
-          - deploy_sandbox_prd_w
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - deploy_live_prd_s:
-        requires:
-        - hold_sandbox
-        - push_production
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
-    - deploy_live_prd_w:
-        requires:
-        - hold_sandbox
-        - push_production
-        filters:
-          branches:
-            ignore: /.*/
-          tags:
-            only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+      - deploy_sandbox_stg_w:
+          requires:
+            - push_staging
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+      - deploy_live_stg_s:
+          requires:
+            - push_staging
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+      - deploy_live_stg_w:
+          requires:
+            - push_staging
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+).*$/
+      - hold:
+          type: approval
+          requires:
+            - deploy_live_stg_s
+            - deploy_live_stg_w
+            - deploy_sandbox_stg_s
+            - deploy_sandbox_stg_w
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - push_production:
+          requires:
+            - hold
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - deploy_sandbox_prd_s:
+          requires:
+          - push_production
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - deploy_sandbox_prd_w:
+          requires:
+          - push_production
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - hold_sandbox:
+          type: approval
+          requires:
+            - deploy_sandbox_prd_s
+            - deploy_sandbox_prd_w
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - deploy_live_prd_s:
+          requires:
+          - hold_sandbox
+          - push_production
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/
+      - deploy_live_prd_w:
+          requires:
+          - hold_sandbox
+          - push_production
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]+).([0-9]+).([0-9]+)$/

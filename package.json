@@ -24,13 +24,11 @@
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "jest --verbose",
-    "coverage": "codecov",
     "start": "node src/bin/server.js",
     "dev": "nodemon src/bin/server.js",
     "start-worker": "node src/bin/worker.js"
   },
   "devDependencies": {
-    "codecov": "3.0.0",
     "eslint": "4.18.1",
     "eslint-config-pagarme-base": "2.0.0",
     "eslint-plugin-import": "2.9.0",

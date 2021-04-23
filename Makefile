@@ -67,3 +67,13 @@ yopa:
 lint:
 	@docker-compose up lint
 .PHONY: lint
+
+# SONAR
+sonar:
+	sudo sed -i 's/\/home\/circleci\/tldr\//\/usr\/src\//g' coverage/lcov.info
+	docker run -ti -v $(shell pwd):/usr/src pagarme/sonar-scanner -Dsonar.branch.name=${BRANCH}
+.PHONY: sonar
+
+sonar-check-quality-gate:
+	docker run -v $(shell pwd):/usr/src/sonar pagarme/check-sonar-quality-gate
+.PHONY: sonar-check-quality-gate
