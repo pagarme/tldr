@@ -2,18 +2,25 @@
 
 # tldr
 [![CircleCI](https://circleci.com/gh/pagarme/tldr.svg?style=svg&circle-token=b12aa44b42ee421e75a68c1a6c023e35d34337d2)](https://circleci.com/gh/pagarme/tldr)
-[![codecov](https://codecov.io/gh/pagarme/tldr/branch/master/graph/badge.svg?token=yWyqQA73AO)](https://codecov.io/gh/pagarme/tldr)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=alert_status&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=coverage&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=sqale_rating&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=security_rating&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=vulnerabilities&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=reliability_rating&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
 
 :scroll: A microservice to store and display sales receipts
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Technology](#technology)
-- [Getting Started](#getting-started)
-  - [Running Locally](#running-locally)
-  - [Running Tests](#running-tests)
-- [Available Routes](#available-routes)
-- [Useful Links](#useful-links)
+- [tldr](#tldr)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Technology](#technology)
+  - [Getting Started](#getting-started)
+- [Running Locally](#running-locally)
+- [Running Tests](#running-tests)
+  - [Available Routes](#available-routes)
+  - [Useful Links](#useful-links)
 
 ## Introduction
 *tldr* is Pagar.me's backend for processing, storing and displaying receipts.
