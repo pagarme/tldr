@@ -32,6 +32,8 @@ jobs:
         name: yopa
     working_directory: << pipeline.parameters.workingdir >>
     steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workingdir >>
       - checkout
       - restore_cache:
           keys:
@@ -41,6 +43,10 @@ jobs:
       - run: yarn lint
       - run: node_modules/.bin/sequelize db:migrate --config src/config/database.js --migrations-path src/database/migrations/
       - run: yarn test
+      - persist_to_workspace:
+          root: << pipeline.parameters.workingdir >>
+          paths:
+            - .
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
@@ -50,10 +56,16 @@ jobs:
         image: << pipeline.parameters.machine_image >>
       working_directory: << pipeline.parameters.workingdir >>
       steps:
+        - attach_workspace:
+            at: << pipeline.parameters.workingdir >>
         - run: *pull_sonar
         - run:
             name: Run Sonar
             command: make sonar BRANCH=$CIRCLE_BRANCH
+        - persist_to_workspace:
+            root: << pipeline.parameters.workingdir >>
+            paths:
+              - .
   sonar-quality-gate:
     machine: 
       image: << pipeline.parameters.machine_image >>
@@ -342,27 +354,11 @@ workflows:
   build_and_deploy:
     jobs:
       - build:
-          pre-steps:
-            - attach_workspace:
-                at: << pipeline.parameters.workingdir >>
-          post-steps:
-            - persist_to_workspace:
-                root: << pipeline.parameters.workingdir >>
-                paths:
-                  - .
           filters:
             tags:
                 only: /^v.*/
       - sonar-analisys:
           context: dockerhub
-          pre-steps:
-            - attach_workspace:
-                at: << pipeline.parameters.workingdir >>
-          post-steps:
-            - persist_to_workspace:
-                root: << pipeline.parameters.workingdir >>
-                paths:
-                  - .
           filters:
             tags:
               only: /^v.*/
@@ -370,9 +366,6 @@ workflows:
               - build
       - sonar-quality-gate:
           context: dockerhub
-          pre-steps:
-            - attach_workspace:
-                at: << pipeline.parameters.workingdir >>
           filters:
             branches:
               ignore: 
