@@ -71,6 +71,8 @@ jobs:
       image: << pipeline.parameters.machine_image >>
     working_directory: << pipeline.parameters.workingdir >>
     steps:
+      - attach_workspace:
+          at: << pipeline.parameters.workingdir >>
       - run: *pull_sonar_check_quality_gate_image
       - run:
           name: Run Sonar Quality Gate
