@@ -9,7 +9,7 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=vulnerabilities&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=tldr&metric=reliability_rating&token=299bbb692ad23b67c5306a24075fc85231fcb9d0)](https://sonarcloud.io/dashboard?id=tldr)
 
-:scroll: A microservice to store and display sales receipts
+:scroll: A microservice to store and display receipts
 
 ## Table of Contents
 - [tldr](#tldr)
@@ -84,9 +84,12 @@ Response sample:
         "seller_name": "Cool Shop",
         "transaction_status": "paid",
         "amount": 12000,
+        "refund_amount": null,
+        "refund_date": null,
         "payment_date": "2018-03-02T10:12:25.000Z",
         "event_date": "2018-03-22T15:12:25.000Z",
         "card_holder_name": "Senny Bings",
+        "card_number_first_digits": "4111",
         "card_number_last_digits": "7782",
         "card_brand": "visa",
         "installments": 2,
@@ -98,7 +101,15 @@ Response sample:
         "aid": "02199520",
         "application_cryptogram": "5EC8B98ABC8F9E7597647CBCB9A75400",
         "soft_descriptor": "Loja 1 2 3",
-        "statement_descriptor": "pg* Loja 1 2 3"
+        "statement_descriptor": "pg* Loja 1 2 3",
+        "buyer_name": null,
+        "buyer_bank_code": null,
+        "buyer_account_type": null,
+        "buyer_bank_agency": null,
+        "buyer_bank_agency_vd": null,
+        "buyer_bank_account_number": null,
+        "buyer_bank_account_number_vd": null,
+        "buyer_document_number": null
     }
 }
 ```
