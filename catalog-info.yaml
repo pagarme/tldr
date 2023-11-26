@@ -1,0 +1,22 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: TLDR
+  title: TLDR
+  description: Serviço responsável por gerenciar e renderizar recibos de transações do Pagarme.
+  namespace: pagarme-psp
+  annotations:
+    legacy.stone.tech/owner-email: CHANGE_ME
+    legacy.stone.tech/prod-date: CHANGE_ME
+    stone.tech/cloud-accounts: AWS/ADD_CLOUD_ACCOUNT
+  labels:
+    legacy.stone.tech/internal-user-auth-base: CHANGE_ME
+    legacy.stone.tech/access-request-type:  CHANGE_ME
+    legacy.stone.tech/handle-lgpd:  CHANGE_ME
+    legacy.stone.tech/customer-auth-method:  CHANGE_ME
+    stone.tech/endpoint-type:  CHANGE_ME
+spec:
+  type: service
+  lifecycle: production
+  owner: pagarme/ADD_OWNER_TEAM #CHANGE IF NOT OWNER TEAM IS CORRECTLY
